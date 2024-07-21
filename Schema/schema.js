@@ -25,16 +25,12 @@ const DanhSachSanBaySchema = new mongoose.Schema({
 
 const TuyenSchema = new mongoose.Schema({
   MaTuyen: { type: String, required: true, maxlength: 5 },
-  DiemKhoiHanh: {
+  DiemSanBay: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "DanhSachSanBay",
     required: true,
   },
-  DiemKetThuc: {
-    type: String,
-    maxlength: 300,
-    required: true,
-  },
+  DiemKetThuc: { type: String, maxlength: 300, required: true },
   ThoiGianKhoiHanh: { type: Date, required: true },
   ThoiGianKetThuc: { type: Date, required: true },
 });
