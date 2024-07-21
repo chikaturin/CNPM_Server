@@ -10,13 +10,13 @@ const GetTramDung = async (req, res) => {
   }
 };
 
-let new_value_tramDung = 1;
+let new_value_tramDung = 2;
 
 const CreateTramDung = async (req, res) => {
   try {
-    const { MaTuyen, DiaChi, GiaTienVe } = req.body;
+    const { MaTuyen, DiaChi, GiaTienVe, SoKM } = req.body;
 
-    if (!MaTuyen || !DiaChi || !GiaTienVe) {
+    if (!MaTuyen || !DiaChi || !GiaTienVe || !SoKM) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
@@ -37,10 +37,14 @@ const CreateTramDung = async (req, res) => {
       return res.status(400).json({ message: "Giá tiền vé phải lớn hơn 0." });
     }
 
+    if (SoKM <= 0) {
+      return res.status(400).json({ message: "Số KM phải lớn hơn 0." });
+    }
     const newTramDung = new TramDung({
       MaTram,
       MaTuyen,
       DiaChi,
+      SoKM: 0,
       GiaTienVe,
     });
 
@@ -54,15 +58,7 @@ const CreateTramDung = async (req, res) => {
       .json({ message: "Không thể tạo trạm dừng.", error: e.message });
   }
 };
-const UpdateTramDung = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await TramDung.findByIdAndUpdate(id, req.body);
-    res.status(200).json({ message: "TramDung updated successfully" });
-  } catch (e) {
-    res.status(500).json("not update tram dung");
-  }
-};
+
 const DeleteTramDung = async (req, res) => {
   try {
     const { id } = req.params;
@@ -75,6 +71,5 @@ const DeleteTramDung = async (req, res) => {
 module.exports = {
   GetTramDung,
   CreateTramDung,
-  UpdateTramDung,
   DeleteTramDung,
 };

@@ -9,7 +9,6 @@ const {
 
 route.get("/GetPhuongTien", GetPhuongTien);
 route.post("/CreatePhuongTien", CreatePhuongTien);
-route.put("/UpdatePhuongTien/:id", UpdatePhuongTien);
 route.delete("/DeletePhuongTien/:id", DeletePhuongTien);
 
 module.exports = route;

@@ -49,16 +49,6 @@ const CreatePhuongTien = async (req, res) => {
   }
 };
 
-const UpdatePhuongTien = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await PhuongTien.findByIdAndUpdate(id, req.body);
-    res.status(200).json({ message: "PhuongTien updated successfully" });
-  } catch (e) {
-    res.status(500).json("not update phuong tien");
-  }
-};
-
 const DeletePhuongTien = async (req, res) => {
   try {
     const { id } = req.params;
@@ -72,6 +62,5 @@ const DeletePhuongTien = async (req, res) => {
 module.exports = {
   GetPhuongTien,
   CreatePhuongTien,
-  UpdatePhuongTien,
   DeletePhuongTien,
 };

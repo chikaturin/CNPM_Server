@@ -9,7 +9,6 @@ const {
 
 route.get("/GetTramDung", GetTramDung);
 route.post("/CreateTramDung", CreateTramDung);
-route.put("/UpdateTramDung/:id", UpdateTramDung);
 route.delete("/DeleteTramDung/:id", DeleteTramDung);
 
 module.exports = route;

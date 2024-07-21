@@ -41,7 +41,7 @@ const PhuongTienSchema = new mongoose.Schema({
 
 const TramDungSchema = new mongoose.Schema({
   MaTram: { type: String, required: true, maxlength: 5 },
-  MaTuyen: { type: mongoose.Schema.Types.ObjectId, ref: "Tuyen" },
+  MaTuyen: { type: String, ref: "Tuyen" },
   DiaChi: { type: String, required: true, maxlength: 100 },
   SoKM: { type: Number, required: true },
   GiaTienVe: { type: Number, required: true, maxlength: 100 },
