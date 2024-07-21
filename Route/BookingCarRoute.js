@@ -8,7 +8,7 @@ const {
   CancelBooking,
 } = require("../Controller/BookingCarController.js");
 
-route.get("/GetDatXeOto", GetDatXeOto);
+route.post("/GetDatXeOto", GetDatXeOto);
 route.post("/BookingCar", BookingCar);
 route.put("/BookingCar/SchedularChange/:id", SchedularChange);
 route.delete("/BookingCar/CancelBooking/:id", CancelBooking);

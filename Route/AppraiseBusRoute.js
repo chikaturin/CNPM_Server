@@ -7,7 +7,7 @@ const {
   DeleteAppraiseBus,
 } = require("../Controller/AppraiseBusController.js");
 
-route.post("/GetAppraiseBus", GetAppraiseBus);
+route.get("/GetAppraiseBus", GetAppraiseBus);
 route.post("/CreateAppraiseBus", CreateAppraiseBus);
 route.delete("/DeleteAppraiseBus/:id", DeleteAppraiseBus);
 
