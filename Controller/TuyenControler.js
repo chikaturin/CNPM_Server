@@ -13,30 +13,25 @@ const GetTuyen = async (req, res) => {
 let new_value_tuyen = 1;
 const CreateTuyen = async (req, res) => {
   try {
-    const { DiemKhoiHanh, DiemKetThuc, ThoiGianKhoiHanh, ThoiGianKetThuc } =
+    const { DiemSanBay, DiemKetThuc, ThoiGianKhoiHanh, ThoiGianKetThuc } =
       req.body;
 
-    if (
-      !DiemKhoiHanh ||
-      !DiemKetThuc ||
-      !ThoiGianKhoiHanh ||
-      !ThoiGianKetThuc
-    ) {
+    if (!DiemSanBay || !DiemKetThuc || !ThoiGianKhoiHanh || !ThoiGianKetThuc) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
     const diemKhoiHanhIsAirport = await DanhSachSanBay.exists({
-      MaSB: DiemKhoiHanh,
+      MaSB: DiemSanBay,
     });
     const diemKetThucIsAirport = await DanhSachSanBay.exists({
       MaSB: DiemKetThuc,
     });
-    const checkKH = await Tuyen.exists({ DiemKhoiHanh });
+    const checkKH = await Tuyen.exists({ DiemSanBay });
     const checkKT = await Tuyen.exists({ DiemKetThuc });
     if (
       diemKhoiHanhIsAirport &&
       diemKetThucIsAirport &&
-      DiemKhoiHanh === DiemKetThuc
+      DiemSanBay === DiemKetThuc
     ) {
       return res.status(400).json({
         message: "Điểm khởi hành và điểm kết thúc không thể đều là sân bay.",
@@ -56,7 +51,7 @@ const CreateTuyen = async (req, res) => {
     new_value_tuyen += 1;
     const newTuyen = new Tuyen({
       MaTuyen,
-      DiemKhoiHanh,
+      DiemSanBay,
       DiemKetThuc,
       ThoiGianKhoiHanh,
       ThoiGianKetThuc,
