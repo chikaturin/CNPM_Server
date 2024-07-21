@@ -6,7 +6,7 @@ const {
   DeleteLichSuDatTau,
 } = require("../Controller/HistoryTrainController.js");
 
-route.post("/GetLichSuDatTau", GetLichSuDatTau);
+route.get("/GetLichSuDatTau", GetLichSuDatTau);
 route.delete("/DeleteLichSuDatTau", DeleteLichSuDatTau);
 
 module.exports = route;

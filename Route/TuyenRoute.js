@@ -6,7 +6,7 @@ const {
   DeleteTuyen,
 } = require("../Controller/TuyenControler.js");
 
-route.post("/GetTuyen", GetTuyen);
+route.get("/GetTuyen", GetTuyen);
 route.post("/CreateTuyen", CreateTuyen);
 route.delete("/DeleteTuyen/:id", DeleteTuyen);
 

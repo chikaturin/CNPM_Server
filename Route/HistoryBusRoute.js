@@ -6,7 +6,7 @@ const {
   DeleteLichSuXeBus,
 } = require("../Controller/HistoryBusController.js");
 
-route.post("/GetHistoryBus", GetLichSuXeBus);
+route.get("/GetHistoryBus", GetLichSuXeBus);
 route.delete("/DeleteHistoryBus", DeleteLichSuXeBus);
 
 module.exports = route;

@@ -6,7 +6,7 @@ const {
   DeleteLichSuDatXeOto,
 } = require("../Controller/HistoryCarController.js");
 
-route.post("/GetLichSuDatXeOto", GetLichSuDatXeOto);
+route.get("/GetLichSuDatXeOto", GetLichSuDatXeOto);
 route.delete("/DeleteLichSuDatXeOto", DeleteLichSuDatXeOto);
 
 module.exports = route;
