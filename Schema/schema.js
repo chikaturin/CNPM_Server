@@ -4,7 +4,7 @@ const KhachHangSchema = new mongoose.Schema({
   MaCus: {
     type: String,
     required: true,
-    unique: true,
+
     maxlength: 5,
   },
   TenKH: {
@@ -24,7 +24,7 @@ const DanhSachSanBaySchema = new mongoose.Schema({
 });
 
 const TuyenSchema = new mongoose.Schema({
-  MaTuyen: { type: String, required: true, unique: true, maxlength: 5 },
+  MaTuyen: { type: String, required: true, maxlength: 5 },
   DiemKhoiHanh: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "DanhSachSanBay",
@@ -40,7 +40,7 @@ const TuyenSchema = new mongoose.Schema({
 });
 
 const PhuongTienSchema = new mongoose.Schema({
-  MaPT: { type: String, required: true, unique: true, maxlength: 5 },
+  MaPT: { type: String, required: true, maxlength: 5 },
   MaTuyen: { type: String, ref: "Tuyen" },
   MaLoai: { type: Boolean, required: true },
   TenPhuongTien: { type: String, required: true, maxlength: 100 },
@@ -48,7 +48,7 @@ const PhuongTienSchema = new mongoose.Schema({
 });
 
 const TramDungSchema = new mongoose.Schema({
-  MaTram: { type: String, required: true, unique: true, maxlength: 5 },
+  MaTram: { type: String, required: true, maxlength: 5 },
   MaTuyen: { type: mongoose.Schema.Types.ObjectId, ref: "Tuyen" },
   DiaChi: { type: String, required: true, maxlength: 100 },
   SoKM: { type: Number, required: true },
@@ -56,7 +56,7 @@ const TramDungSchema = new mongoose.Schema({
 });
 
 const ChiTietXeOtoSchema = new mongoose.Schema({
-  MaDetailCar: { type: String, required: true, unique: true, maxlength: 5 },
+  MaDetailCar: { type: String, required: true, maxlength: 5 },
   TenHangXe: { type: String, required: true, maxlength: 100 },
   TenChuSoHuu: { type: String, required: true, maxlength: 100 },
   SoHanhLyToiDa: { type: Number, required: true },
@@ -69,7 +69,7 @@ const ChiTietXeOtoSchema = new mongoose.Schema({
 });
 
 const DatXeOtoSchema = new mongoose.Schema({
-  MaDX: { type: String, required: true, unique: true, maxlength: 5 },
+  MaDX: { type: String, required: true, maxlength: 5 },
   MaDetailCar: { type: String, ref: "ChiTietXeOto" },
   MaCus: { type: String, ref: "KhachHang" },
   MaTram: { type: String, ref: "TramDung" },
@@ -89,7 +89,7 @@ const AppraiseCarSchema = new mongoose.Schema({
 });
 
 const PhieuDatTauSchema = new mongoose.Schema({
-  MaVeTau: { type: String, required: true, unique: true, maxlength: 5 },
+  MaVeTau: { type: String, required: true, maxlength: 5 },
   MaCus: { type: String, ref: "KhachHang" },
   MaPT: { type: String, ref: "PhuongTien" },
   SLVeNguoiLon: { type: Number, required: true },
@@ -109,7 +109,7 @@ const AppraiseTrainSchema = new mongoose.Schema({
 });
 
 const PhieuDatXeBusSchema = new mongoose.Schema({
-  MaVeBus: { type: String, required: true, unique: true, maxlength: 5 },
+  MaVeBus: { type: String, required: true, maxlength: 5 },
   MaCus: { type: String, ref: "KhachHang" },
   MaPT: { type: String, ref: "PhuongTien" },
   SLVe: { type: Number, required: true },
