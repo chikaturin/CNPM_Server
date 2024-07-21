@@ -1,5 +1,5 @@
 const PhuongTien = require("../Schema/schema.js").PhuongTien;
-
+const Tuyen = require("../Schema/schema.js").Tuyen;
 const GetPhuongTien = async (req, res) => {
   try {
     const phuongTien = await PhuongTien.find({});
@@ -9,13 +9,43 @@ const GetPhuongTien = async (req, res) => {
   }
 };
 
+let new_value_phuongTien = 1;
 const CreatePhuongTien = async (req, res) => {
   try {
-    const createPhuongTien = await PhuongTien.create(req.body);
-    res.status(200).json({ createPhuongTien });
+    const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa } = req.body;
+
+    // Kiểm tra dữ liệu yêu cầu
+    if (!MaTuyen || !MaLoai === undefined || !TenPhuongTien || !SoGheToiDa) {
+      return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
+    }
+
+    if (SoGheToiDa <= 7) {
+      return res.status(400).json({ message: "Số ghế tối đa phải lớn hơn 7." });
+    }
+
+    const MaPT = `PT${new_value_phuongTien}`;
+    new_value_phuongTien += 1;
+
+    // Kiểm tra xem Mã Tuyến có tồn tại hay không
+    const checkMaTuyen = await Tuyen.exists({ MaTuyen });
+    if (!checkMaTuyen) {
+      return res.status(400).json({ message: "Mã tuyến không tồn tại." });
+    }
+
+    // Tạo mới PhuongTien
+    const createPhuongTien = new PhuongTien({
+      MaPT,
+      MaTuyen,
+      MaLoai,
+      TenPhuongTien,
+      SoGheToiDa,
+    });
+
+    const result = await createPhuongTien.save();
+    res.status(200).json({ result });
   } catch (e) {
-    console.error(e); // Log the error for debugging
-    res.status(500).json("not create phuong tien");
+    console.error(e);
+    res.status(500).json({ message: "Không thể tạo phương tiện" });
   }
 };
 

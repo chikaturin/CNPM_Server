@@ -33,7 +33,7 @@ const TuyenSchema = new mongoose.Schema({
 
 const PhuongTienSchema = new mongoose.Schema({
   MaPT: { type: String, required: true, maxlength: 5 },
-  MaTuyen: { type: String, ref: "Tuyen" },
+  MaTuyen: { type: String, required: true, ref: "Tuyen" },
   MaLoai: { type: Boolean, required: true },
   TenPhuongTien: { type: String, required: true, maxlength: 100 },
   SoGheToiDa: { type: Number, required: true },
@@ -148,18 +148,6 @@ PhieuDatTauSchema.pre("save", async function (next) {
   new_value_train += 1;
 
   next();
-});
-
-let new_value_phuongTien = 1;
-PhuongTienSchema.pre("save", async function (next) {
-  try {
-    this.MaPT = `PT${new_value}`;
-    new_value_phuongTien += 1;
-
-    next();
-  } catch (err) {
-    next(err);
-  }
 });
 
 let new_value_detailCar = 1;

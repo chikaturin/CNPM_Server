@@ -1,4 +1,6 @@
-const DatXeOto = require("../Schema/schema.js").DatXeOto;
+const DatXeOto = require("../Schema/schema").DatXeOto; // Đảm bảo rằng bạn đã import mô hình DatXeOto
+const TramDung = require("../Schema/schema").TramDung; // Đảm bảo rằng bạn đã import mô hình TramDung
+const ChiTietXeOto = require("../Schema/schema").ChiTietXeOto;
 
 const GetDatXeOto = async (req, res) => {
   try {
@@ -10,6 +12,7 @@ const GetDatXeOto = async (req, res) => {
 };
 let new_value_car = 1;
 
+// Hàm tạo đơn đặt xe
 const BookingCar = async (req, res) => {
   try {
     const {
@@ -23,13 +26,17 @@ const BookingCar = async (req, res) => {
       SoKm,
     } = req.body;
 
+    // Kiểm tra tính hợp lệ
     if (SoLuongHanhKhach <= 0) {
       return res
         .status(400)
         .json({ message: "Số lượng hành khách phải lớn hơn 0." });
     }
+
+    // Tìm thông tin trạm dừng và chi tiết xe
     const tramDung = await TramDung.findById(MaTram);
     const chiTietXe = await ChiTietXeOto.findById(MaDetailCar);
+
     if (!chiTietXe) {
       return res.status(404).json({ message: "Chi tiết xe không tồn tại" });
     }
@@ -39,25 +46,40 @@ const BookingCar = async (req, res) => {
         message: "Số lượng hành khách tối đa là " + chiTietXe.SoGheToiDa,
       });
     }
-    const MaDX = `DX${new_value_car}`;
-    new_value_car += 1;
+
+    // Sinh mã đặt xe
+    const MaDX = `DX${new_value_car}`; // Ví dụ: sử dụng thời gian hiện tại để tạo mã
+
+    // Tạo đối tượng DatXeOto và lưu vào cơ sở dữ liệu
     const CreateDatXeOto = new DatXeOto({
+      MaDX,
       MaDetailCar,
+      MaCus,
+      MaTram,
       DiemDon,
       DiemTra,
       SoLuongHanhKhach,
       NgayGioDat,
-      SoKm: tramDung.SoKM,
+      SoKm,
       ThanhTien: chiTietXe.SoTien_1km * SoKm,
+      Trangthai: true, // Hoặc giá trị mặc định nào đó
     });
-    await CreateDatXeOto.save();
 
+    const result = await CreateDatXeOto.save();
+
+    // Trả về kết quả
     res.status(200).json(result);
   } catch (e) {
     console.error("Lỗi khi tạo DatXeOto:", e);
     res.status(500).json({ error: "Không thể tạo DatXeOto" });
   }
 };
+
+// Hàm giả lập để lấy giá trị tự động tăng, bạn cần thay đổi theo cách bạn lưu trữ giá trị tự động tăng
+async function getNewValueCar() {
+  // Implement logic to get the next value for MaDX
+  return 1; // Giá trị mẫu
+}
 const SchedularChange = async (req, res) => {
   try {
     const { id } = req.params;
