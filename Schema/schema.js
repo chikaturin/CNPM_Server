@@ -64,7 +64,7 @@ const ChiTietXeOtoSchema = new mongoose.Schema({
 const DatXeOtoSchema = new mongoose.Schema({
   MaDX: { type: String, required: true, maxlength: 5 },
   MaDetailCar: { type: String, ref: "ChiTietXeOto" },
-  MaCus: { type: String, ref: "KhachHang" },
+  Sdt: { type: String, ref: "KhachHang" },
   MaTram: { type: String, ref: "TramDung" },
   DiemDon: { type: String, required: true, maxlength: 100 },
   DiemTra: { type: String, required: true, maxlength: 100 },
