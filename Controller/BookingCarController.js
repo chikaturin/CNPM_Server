@@ -15,23 +15,8 @@ let new_value_car = 1;
 // Hàm tạo đơn đặt xe
 const BookingCar = async (req, res) => {
   try {
-    const {
-      MaDetailCar,
-      MaCus,
-      MaTram,
-      DiemDon,
-      DiemTra,
-      SoLuongHanhKhach,
-      NgayGioDat,
-      SoKm,
-    } = req.body;
-
-    // Kiểm tra tính hợp lệ
-    if (SoLuongHanhKhach <= 0) {
-      return res
-        .status(400)
-        .json({ message: "Số lượng hành khách phải lớn hơn 0." });
-    }
+    const { MaDetailCar, MaCus, MaTram, DiemDon, DiemTra, NgayGioDat, SoKm } =
+      req.body;
 
     // Tìm thông tin trạm dừng và chi tiết xe
     const tramDung = await TramDung.findById(MaTram);
@@ -39,12 +24,6 @@ const BookingCar = async (req, res) => {
 
     if (!chiTietXe) {
       return res.status(404).json({ message: "Chi tiết xe không tồn tại" });
-    }
-
-    if (SoLuongHanhKhach > chiTietXe.SoGheToiDa) {
-      return res.status(400).json({
-        message: "Số lượng hành khách tối đa là " + chiTietXe.SoGheToiDa,
-      });
     }
 
     // Sinh mã đặt xe
@@ -58,7 +37,6 @@ const BookingCar = async (req, res) => {
       MaTram,
       DiemDon,
       DiemTra,
-      SoLuongHanhKhach,
       NgayGioDat,
       SoKm,
       ThanhTien: chiTietXe.SoTien_1km * SoKm,

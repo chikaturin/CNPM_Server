@@ -8,9 +8,27 @@ const GetChiTietXeOto = async (req, res) => {
     res.status(500).json("not get chi tiet xe o to");
   }
 };
+
+let new_value_detailCar = 1;
 const CreateChiTietXeOto = async (req, res) => {
   try {
-    const CreateChiTietXeOto = new ChiTietXeOto({
+    const {
+      TenHangXe,
+      TenChuSoHuu,
+      SoHanhLyToiDa,
+      BienSoXe,
+      CongTy,
+      SDT_TaiXe,
+      SoGheToiDa,
+      SoTien_1km,
+      Image,
+      MaSB,
+    } = req.body;
+
+    const MaDetailCar = `DC${new_value_detailCar}`;
+    new_value_detailCar += 1;
+
+    const createChiTietXeOto = new ChiTietXeOto({
       MaDetailCar,
       TenHangXe,
       TenChuSoHuu,
@@ -23,12 +41,17 @@ const CreateChiTietXeOto = async (req, res) => {
       Image,
       MaSB,
     });
-    await CreateChiTietXeOto.save();
-    res.status(200).json({ CreateChiTietXeOto });
+
+    await createChiTietXeOto.save();
+    res.status(200).json({ createChiTietXeOto });
   } catch (e) {
-    res.status(500).json("not create chi tiet xe o to");
+    console.error("Error creating ChiTietXeOto:", e);
+    res
+      .status(500)
+      .json({ message: "Not able to create ChiTietXeOto", error: e.message });
   }
 };
+
 const UpdateChiTietXeOto = async (req, res) => {
   try {
     const { id } = req.params;

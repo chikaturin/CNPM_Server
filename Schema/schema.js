@@ -48,15 +48,15 @@ const TramDungSchema = new mongoose.Schema({
 });
 
 const ChiTietXeOtoSchema = new mongoose.Schema({
-  MaDetailCar: { type: String, required: true, maxlength: 5 },
+  MaDetailCar: { type: String, required: true },
   TenHangXe: { type: String, required: true, maxlength: 100 },
   TenChuSoHuu: { type: String, required: true, maxlength: 100 },
   SoHanhLyToiDa: { type: Number, required: true },
   BienSoXe: { type: String, required: true, maxlength: 10 },
   CongTy: { type: String, required: true, maxlength: 100 },
   SDT_TaiXe: { type: String, required: true, maxlength: 10 },
-  SoGheToiDa: { type: Number, required: true, maxlength: 100 },
-  SoTien_1km: { type: Number, required: true, maxlength: 100 },
+  SoGheToiDa: { type: Number, required: true },
+  SoTien_1km: { type: Number, required: true },
   Image: { type: String, required: true },
   MaSB: { type: String, ref: "DanhSachSanBay" },
 });
@@ -148,18 +148,6 @@ PhieuDatTauSchema.pre("save", async function (next) {
   new_value_train += 1;
 
   next();
-});
-
-let new_value_detailCar = 1;
-ChiTietXeOtoSchema.pre("save", async function (next) {
-  try {
-    this.MaDetailCar = `DetailCar${new_value}`;
-    new_value_detailCar += 1;
-
-    next();
-  } catch (err) {
-    next(err);
-  }
 });
 
 DatXeOtoSchema.post("save", async function (doc) {
