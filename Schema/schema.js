@@ -57,6 +57,7 @@ const ChiTietXeOtoSchema = new mongoose.Schema({
   SDT_TaiXe: { type: String, required: true, maxlength: 10 },
   SoGheToiDa: { type: Number, required: true, maxlength: 100 },
   SoTien_1km: { type: Number, required: true, maxlength: 100 },
+  Image: { type: String, required: true },
   MaSB: { type: String, ref: "DanhSachSanBay" },
 });
 

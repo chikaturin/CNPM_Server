@@ -10,7 +10,7 @@ const GetTramDung = async (req, res) => {
   }
 };
 
-let new_value_tramDung = 2;
+let new_value_tramDung = 1;
 
 const CreateTramDung = async (req, res) => {
   try {
@@ -44,7 +44,7 @@ const CreateTramDung = async (req, res) => {
       MaTram,
       MaTuyen,
       DiaChi,
-      SoKM: 0,
+      SoKM,
       GiaTienVe,
     });
 

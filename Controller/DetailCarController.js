@@ -10,7 +10,19 @@ const GetChiTietXeOto = async (req, res) => {
 };
 const CreateChiTietXeOto = async (req, res) => {
   try {
-    const CreateChiTietXeOto = new ChiTietXeOto(req.body);
+    const CreateChiTietXeOto = new ChiTietXeOto({
+      MaDetailCar,
+      TenHangXe,
+      TenChuSoHuu,
+      SoHanhLyToiDa,
+      BienSoXe,
+      CongTy,
+      SDT_TaiXe,
+      SoGheToiDa,
+      SoTien_1km,
+      Image,
+      MaSB,
+    });
     await CreateChiTietXeOto.save();
     res.status(200).json({ CreateChiTietXeOto });
   } catch (e) {
