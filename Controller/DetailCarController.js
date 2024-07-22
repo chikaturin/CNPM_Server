@@ -61,6 +61,23 @@ const UpdateChiTietXeOto = async (req, res) => {
     res.status(500).json("not update chi tiet xe o to");
   }
 };
+
+const GetChiTietXeOtoID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const chiTietXeOto = await ChiTietXeOto.findById(id);
+
+    if (!chiTietXeOto) {
+      return res.status(404).json({ message: "ChiTietXeOto not found" });
+    }
+
+    res.status(200).json(chiTietXeOto);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const DeleteChiTietXeOto = async (req, res) => {
   try {
     const { id } = req.params;
@@ -73,6 +90,7 @@ const DeleteChiTietXeOto = async (req, res) => {
 
 module.exports = {
   GetChiTietXeOto,
+  GetChiTietXeOtoID,
   CreateChiTietXeOto,
   UpdateChiTietXeOto,
   DeleteChiTietXeOto,
