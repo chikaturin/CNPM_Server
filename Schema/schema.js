@@ -68,7 +68,7 @@ const DatXeOtoSchema = new mongoose.Schema({
   MaTram: { type: String, ref: "TramDung" },
   DiemSanBay: { type: String, required: true, maxlength: 100 },
   DiemDon_Tra: { type: String, required: true, maxlength: 100 },
-  NgayGioDat: { type: Date, required: true },
+  NgayGioDat: { type: String, required: true },
   ThanhTien: { type: Number, required: true },
   Trangthai: { type: Boolean, required: true },
   Description: { type: String, maxlength: 500 },

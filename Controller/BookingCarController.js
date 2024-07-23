@@ -24,6 +24,7 @@ const BookingCar = async (req, res) => {
       NgayGioDat,
       ThanhTien,
       SoKm,
+      Description, // Thêm trường Description từ client
     } = req.body;
 
     // Tìm thông tin trạm dừng và chi tiết xe
@@ -39,10 +40,9 @@ const BookingCar = async (req, res) => {
     }
 
     // Sinh mã đặt xe
-    const MaDX = `DX${new_value_car}`; // Sử dụng thời gian hiện tại để tạo mã
+    const MaDX = `DX${new_value_car}`; // Sử dụng giá trị hiện tại để tạo mã
     new_value_car += 1;
-    // Tính toán giá tiền
-    // Kiểm tra giá trị của ThanhTien
+
     // Tạo đối tượng DatXeOto và lưu vào cơ sở dữ liệu
     const CreateDatXeOto = new DatXeOto({
       MaDX,
@@ -54,8 +54,8 @@ const BookingCar = async (req, res) => {
       NgayGioDat,
       SoKm,
       ThanhTien,
-      Trangthai: true,
-      Description: "Description here", // Add a default or computed description if required
+      Trangthai: true, // Đảm bảo rằng tên trường khớp với tên trường từ client
+      Description, // Lưu mô tả từ client
     });
 
     const result = await CreateDatXeOto.save();
