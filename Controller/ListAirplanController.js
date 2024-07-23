@@ -48,10 +48,16 @@ const DeleteDanhSachSanBay = async (req, res) => {
 const GetSanBayID = async (req, res) => {
   try {
     const { id } = req.params;
-    await DanhSachSanBay.findById(id);
-    res.status(200).json({ message: "DanhSachSanBay deleted successfully" });
+    const danhSachSanBay = await DanhSachSanBay.findById(id);
+
+    if (!danhSachSanBay) {
+      return res.status(404).json({ message: "Sân bay không tồn tại" });
+    }
+
+    res.status(200).json(danhSachSanBay);
   } catch (e) {
-    res.status(500).json("not delete danh sach san bay");
+    console.error(e);
+    res.status(500).json({ message: "Lỗi máy chủ" });
   }
 };
 

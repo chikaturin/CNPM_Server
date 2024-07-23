@@ -62,10 +62,16 @@ const CreateTramDung = async (req, res) => {
 const GetTramDungID = async (req, res) => {
   try {
     const { id } = req.params;
-    await TramDung.findById(id);
-    res.status(200).json({ message: "TramDung deleted successfully" });
+    const tramDung = await TramDung.findById(id);
+
+    if (!tramDung) {
+      return res.status(404).json({ message: "Trạm dừng không tồn tại" });
+    }
+
+    res.status(200).json(tramDung);
   } catch (e) {
-    res.status(500).json("not delete tram dung");
+    console.error(e);
+    res.status(500).json({ message: "Lỗi máy chủ" });
   }
 };
 
