@@ -10,7 +10,7 @@ const GetDatXeOto = async (req, res) => {
     res.status(500).json("not get dat xe o to");
   }
 };
-let new_value_car = 1;
+let new_value_car = 2;
 
 // Hàm tạo đơn đặt xe
 const BookingCar = async (req, res) => {
@@ -22,6 +22,7 @@ const BookingCar = async (req, res) => {
       DiemSanBay,
       DiemDon_Tra,
       NgayGioDat,
+      ThanhTien,
       SoKm,
     } = req.body;
 
@@ -33,9 +34,15 @@ const BookingCar = async (req, res) => {
       return res.status(404).json({ message: "Chi tiết xe không tồn tại" });
     }
 
-    // Sinh mã đặt xe
-    const MaDX = `DX${new_value_car}`; // Ví dụ: sử dụng thời gian hiện tại để tạo mã
+    if (!tramDung) {
+      return res.status(404).json({ message: "Trạm dừng không tồn tại" });
+    }
 
+    // Sinh mã đặt xe
+    const MaDX = `DX${new_value_car}`; // Sử dụng thời gian hiện tại để tạo mã
+    new_value_car += 1;
+    // Tính toán giá tiền
+    // Kiểm tra giá trị của ThanhTien
     // Tạo đối tượng DatXeOto và lưu vào cơ sở dữ liệu
     const CreateDatXeOto = new DatXeOto({
       MaDX,
@@ -45,9 +52,10 @@ const BookingCar = async (req, res) => {
       DiemSanBay,
       DiemDon_Tra,
       NgayGioDat,
-      SoKm: tramDung.SoKM,
-      ThanhTien: chiTietXe.SoTien_1km * SoKm,
+      SoKm,
+      ThanhTien,
       Trangthai: true,
+      Description: "Description here", // Add a default or computed description if required
     });
 
     const result = await CreateDatXeOto.save();
@@ -60,11 +68,6 @@ const BookingCar = async (req, res) => {
   }
 };
 
-// Hàm giả lập để lấy giá trị tự động tăng, bạn cần thay đổi theo cách bạn lưu trữ giá trị tự động tăng
-async function getNewValueCar() {
-  // Implement logic to get the next value for MaDX
-  return 1; // Giá trị mẫu
-}
 const SchedularChange = async (req, res) => {
   try {
     const { id } = req.params;

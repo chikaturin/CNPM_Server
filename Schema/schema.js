@@ -71,7 +71,7 @@ const DatXeOtoSchema = new mongoose.Schema({
   NgayGioDat: { type: Date, required: true },
   ThanhTien: { type: Number, required: true },
   Trangthai: { type: Boolean, required: true },
-  Description: { type: String, required: true, maxlength: 500 },
+  Description: { type: String, maxlength: 500 },
 });
 
 const AppraiseCarSchema = new mongoose.Schema({
