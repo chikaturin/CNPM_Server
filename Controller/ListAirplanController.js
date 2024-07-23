@@ -9,7 +9,7 @@ const GetDanhSachSanBay = async (req, res) => {
   }
 };
 
-let new_value_danhSachSanBay = 5;
+let new_value_danhSachSanBay = 1;
 
 const CreateDanhSachSanBay = async (req, res) => {
   try {
@@ -45,9 +45,19 @@ const DeleteDanhSachSanBay = async (req, res) => {
     res.status(500).json("not delete danh sach san bay");
   }
 };
+const GetSanBayID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await DanhSachSanBay.findById(id);
+    res.status(200).json({ message: "DanhSachSanBay deleted successfully" });
+  } catch (e) {
+    res.status(500).json("not delete danh sach san bay");
+  }
+};
 
 module.exports = {
   GetDanhSachSanBay,
   CreateDanhSachSanBay,
   DeleteDanhSachSanBay,
+  GetSanBayID,
 };

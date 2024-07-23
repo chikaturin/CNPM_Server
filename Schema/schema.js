@@ -18,7 +18,7 @@ const KhachHangSchema = new mongoose.Schema({
 });
 
 const DanhSachSanBaySchema = new mongoose.Schema({
-  MaSB: { type: String, required: true }, // Chỉnh sửa lỗi chính tả "uinque" thành "unique"
+  MaSB: { type: String, required: true },
   TenSanBay: { type: String, required: true, maxlength: 100 },
   ThanhPho: { type: String, required: true, maxlength: 100 },
 });
@@ -66,8 +66,8 @@ const DatXeOtoSchema = new mongoose.Schema({
   MaDetailCar: { type: String, ref: "ChiTietXeOto" },
   Sdt: { type: String, ref: "KhachHang" },
   MaTram: { type: String, ref: "TramDung" },
-  DiemDon: { type: String, required: true, maxlength: 100 },
-  DiemTra: { type: String, required: true, maxlength: 100 },
+  DiemSanBay: { type: String, required: true, maxlength: 100 },
+  DiemDon_Tra: { type: String, required: true, maxlength: 100 },
   NgayGioDat: { type: Date, required: true },
   ThanhTien: { type: Number, required: true },
   Trangthai: { type: Boolean, required: true },
@@ -141,15 +141,6 @@ const LichSuDatXeBusSchema = new mongoose.Schema({
 });
 
 // trigger
-
-let new_value_train = 1;
-PhieuDatTauSchema.pre("save", async function (next) {
-  this.MaVeTau = `PTTau${new_value}`;
-  this.ThanhTien = ThanhTien;
-  new_value_train += 1;
-
-  next();
-});
 
 DatXeOtoSchema.post("save", async function (doc) {
   try {

@@ -15,8 +15,15 @@ let new_value_car = 1;
 // Hàm tạo đơn đặt xe
 const BookingCar = async (req, res) => {
   try {
-    const { MaDetailCar, MaCus, MaTram, DiemDon, DiemTra, NgayGioDat, SoKm } =
-      req.body;
+    const {
+      MaDetailCar,
+      MaCus,
+      MaTram,
+      DiemSanBay,
+      DiemDon_Tra,
+      NgayGioDat,
+      SoKm,
+    } = req.body;
 
     // Tìm thông tin trạm dừng và chi tiết xe
     const tramDung = await TramDung.findById(MaTram);
@@ -35,12 +42,12 @@ const BookingCar = async (req, res) => {
       MaDetailCar,
       MaCus,
       MaTram,
-      DiemDon,
-      DiemTra,
+      DiemSanBay,
+      DiemDon_Tra,
       NgayGioDat,
-      SoKm,
+      SoKm: tramDung.SoKM,
       ThanhTien: chiTietXe.SoTien_1km * SoKm,
-      Trangthai: true, // Hoặc giá trị mặc định nào đó
+      Trangthai: true,
     });
 
     const result = await CreateDatXeOto.save();

@@ -59,6 +59,16 @@ const CreateTramDung = async (req, res) => {
   }
 };
 
+const GetTramDungID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await TramDung.findById(id);
+    res.status(200).json({ message: "TramDung deleted successfully" });
+  } catch (e) {
+    res.status(500).json("not delete tram dung");
+  }
+};
+
 const DeleteTramDung = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,5 +81,6 @@ const DeleteTramDung = async (req, res) => {
 module.exports = {
   GetTramDung,
   CreateTramDung,
+  GetTramDungID,
   DeleteTramDung,
 };
