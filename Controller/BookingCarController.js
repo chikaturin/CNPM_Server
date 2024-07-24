@@ -98,10 +98,20 @@ const CancelBooking = async (req, res) => {
     res.status(500).json("not delete dat xe o to");
   }
 };
+const FindBookingCarID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await DatXeOto.findById(id);
+    res.status(200).json({ message: "Finded successfully" });
+  } catch (e) {
+    res.status(500).json("not find dat xe o to");
+  }
+};
 
 module.exports = {
   GetDatXeOto,
   BookingCar,
   SchedularChange,
   CancelBooking,
+  FindBookingCarID,
 };

@@ -5,10 +5,12 @@ const {
   DeleteDanhSachSanBay,
   CreateDanhSachSanBay,
   GetSanBayID,
+  getSanBaybyMaSanBay,
 } = require("../Controller/ListAirplanController.js");
 
 route.get("/GetDanhSachSanBay", GetDanhSachSanBay);
 route.get("/GetSanBayID/:id", GetSanBayID);
 route.post("/CreateDanhSachSanBay", CreateDanhSachSanBay);
 route.delete("/DeleteDanhSachSanBay/:id", DeleteDanhSachSanBay);
+route.get("/getSanBaybyMaSanBay", getSanBaybyMaSanBay);
 module.exports = route;

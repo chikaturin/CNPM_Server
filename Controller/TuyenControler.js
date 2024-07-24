@@ -74,9 +74,19 @@ const DeleteTuyen = async (req, res) => {
     res.status(500).json("not delete tuyen");
   }
 };
+const TuyenID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Tuyen.findById(id);
+    res.status(200).json({ message: "Tuyen deleted successfully" });
+  } catch (e) {
+    res.status(500).json("not delete tuyen");
+  }
+};
 
 module.exports = {
   GetTuyen,
+  TuyenID,
   CreateTuyen,
   DeleteTuyen,
 };

@@ -61,9 +61,32 @@ const GetSanBayID = async (req, res) => {
   }
 };
 
+const getSanBaybyMaSanBay = async (req, res) => {
+  const { sanbay } = req.query;
+
+  if (!sanbay) {
+    return res.status(400).json({ message: "sanbay is required" });
+  }
+
+  try {
+    const sanbays = await DanhSachSanBay.find({
+      MaSB: { $regex: sanbay, $options: "i" },
+    });
+    if (!sanbays.length) {
+      return res
+        .status(404)
+        .json({ message: "No sanbays found with the given TenSanBay" });
+    }
+    res.status(200).json({ sanbays });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding MaSB", error });
+  }
+};
+
 module.exports = {
   GetDanhSachSanBay,
   CreateDanhSachSanBay,
   DeleteDanhSachSanBay,
   GetSanBayID,
+  getSanBaybyMaSanBay,
 };
