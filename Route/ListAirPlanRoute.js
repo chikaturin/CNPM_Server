@@ -12,5 +12,5 @@ route.get("/GetDanhSachSanBay", GetDanhSachSanBay);
 route.get("/GetSanBayID/:id", GetSanBayID);
 route.post("/CreateDanhSachSanBay", CreateDanhSachSanBay);
 route.delete("/DeleteDanhSachSanBay/:id", DeleteDanhSachSanBay);
-route.get("/getSanBaybyMaSanBay", getSanBaybyMaSanBay);
+route.get("/getSanBaybyTenSanBay", getSanBaybyMaSanBay);
 module.exports = route;

@@ -83,7 +83,7 @@ const TuyenMaTuyen = async (req, res) => {
 
   try {
     const tuyens = await Tuyen.find({
-      MaTuyen: { $regex: tuyen, $options: "i" },
+      DiemSanBay: { $regex: tuyen, $options: "i" },
     });
 
     if (!tuyens.length) {

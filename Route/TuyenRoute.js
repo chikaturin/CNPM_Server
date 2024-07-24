@@ -11,6 +11,6 @@ route.get("/GetTuyen", GetTuyen);
 route.get("/TuyenID/:id", TuyenMaTuyen);
 route.post("/CreateTuyen", CreateTuyen);
 route.delete("/DeleteTuyen/:id", DeleteTuyen);
-route.get("/TuyenMaTuyen", TuyenMaTuyen);
+route.get("/TuyenMaSB", TuyenMaTuyen);
 
 module.exports = route;

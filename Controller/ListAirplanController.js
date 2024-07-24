@@ -1,15 +1,15 @@
 const DanhSachSanBay = require("../Schema/schema").DanhSachSanBay;
+const { v4: uuidv4 } = require("uuid"); // For generating unique IDs
 
 const GetDanhSachSanBay = async (req, res) => {
   try {
     const danhSachSanBay = await DanhSachSanBay.find({});
     res.status(200).json({ danhSachSanBay });
   } catch (e) {
-    res.status(500).json("not get danh sach san bay");
+    console.error(e);
+    res.status(500).json({ message: "Error retrieving danh sach san bay" });
   }
 };
-
-let new_value_danhSachSanBay = 1;
 
 const CreateDanhSachSanBay = async (req, res) => {
   try {
@@ -19,8 +19,7 @@ const CreateDanhSachSanBay = async (req, res) => {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
-    const MaSB = `SB${new_value_danhSachSanBay}`;
-    new_value_danhSachSanBay += 1;
+    const MaSB = uuidv4(); // Generate a unique ID using UUID
 
     const newDanhSachSanBay = new DanhSachSanBay({
       MaSB: MaSB,
@@ -29,7 +28,7 @@ const CreateDanhSachSanBay = async (req, res) => {
     });
 
     await newDanhSachSanBay.save();
-    res.status(200).json({ newDanhSachSanBay });
+    res.status(201).json({ newDanhSachSanBay });
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Không thể tạo danh sách sân bay." });
@@ -39,12 +38,19 @@ const CreateDanhSachSanBay = async (req, res) => {
 const DeleteDanhSachSanBay = async (req, res) => {
   try {
     const { id } = req.params;
-    await DanhSachSanBay.findByIdAndDelete(id);
+    const result = await DanhSachSanBay.findByIdAndDelete(id);
+
+    if (!result) {
+      return res.status(404).json({ message: "DanhSachSanBay not found" });
+    }
+
     res.status(200).json({ message: "DanhSachSanBay deleted successfully" });
   } catch (e) {
-    res.status(500).json("not delete danh sach san bay");
+    console.error(e);
+    res.status(500).json({ message: "Error deleting danh sach san bay" });
   }
 };
+
 const GetSanBayID = async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,7 +63,7 @@ const GetSanBayID = async (req, res) => {
     res.status(200).json(danhSachSanBay);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Lỗi máy chủ" });
+    res.status(500).json({ message: "Error retrieving sân bay" });
   }
 };
 
@@ -70,16 +76,18 @@ const getSanBaybyMaSanBay = async (req, res) => {
 
   try {
     const sanbays = await DanhSachSanBay.find({
-      MaSB: { $regex: sanbay, $options: "i" },
+      TenSanBay: { $regex: sanbay, $options: "i" },
     });
+
     if (!sanbays.length) {
       return res
         .status(404)
         .json({ message: "No sanbays found with the given TenSanBay" });
     }
+
     res.status(200).json({ sanbays });
   } catch (error) {
-    res.status(500).json({ message: "Error finding MaSB", error });
+    res.status(500).json({ message: "Error finding SanBay", error });
   }
 };
 
