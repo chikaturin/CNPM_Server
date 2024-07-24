@@ -84,9 +84,32 @@ const DeleteTramDung = async (req, res) => {
     res.status(500).json("not delete tram dung");
   }
 };
+const getTramDungByDiaChi = async (req, res) => {
+  const { diaChi } = req.query;
+
+  if (!diaChi) {
+    return res.status(400).json({ message: "DiaChi is required" });
+  }
+
+  try {
+    const tramDungs = await TramDung.find({
+      DiaChi: { $regex: diaChi, $options: "i" },
+    });
+    if (!tramDungs.length) {
+      return res
+        .status(404)
+        .json({ message: "No TramDung found with the given DiaChi" });
+    }
+    res.status(200).json({ tramDungs });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding TramDung", error });
+  }
+};
+
 module.exports = {
   GetTramDung,
   CreateTramDung,
   GetTramDungID,
   DeleteTramDung,
+  getTramDungByDiaChi,
 };
