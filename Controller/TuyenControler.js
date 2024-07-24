@@ -74,19 +74,34 @@ const DeleteTuyen = async (req, res) => {
     res.status(500).json("not delete tuyen");
   }
 };
-const TuyenID = async (req, res) => {
+const TuyenMaTuyen = async (req, res) => {
+  const { tuyen } = req.query;
+
+  if (!tuyen) {
+    return res.status(400).json({ message: "tuyen is required" });
+  }
+
   try {
-    const { id } = req.params;
-    await Tuyen.findById(id);
-    res.status(200).json({ message: "Tuyen deleted successfully" });
-  } catch (e) {
-    res.status(500).json("not delete tuyen");
+    const tuyens = await Tuyen.find({
+      MaTuyen: { $regex: tuyen, $options: "i" },
+    });
+
+    if (!tuyens.length) {
+      return res
+        .status(404)
+        .json({ message: "No tuyens found with the given MaTuyen" });
+    }
+
+    res.status(200).json({ tuyens });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding MaTuyen", error });
   }
 };
 
 module.exports = {
   GetTuyen,
-  TuyenID,
+  TuyenMaTuyen,
   CreateTuyen,
   DeleteTuyen,
+  TuyenMaTuyen,
 };

@@ -3,13 +3,14 @@ const route = express.Router();
 const {
   GetTuyen,
   CreateTuyen,
-  TuyenID,
+  TuyenMaTuyen,
   DeleteTuyen,
 } = require("../Controller/TuyenControler.js");
 
 route.get("/GetTuyen", GetTuyen);
-route.get("/TuyenID/:id", TuyenID);
+route.get("/TuyenID/:id", TuyenMaTuyen);
 route.post("/CreateTuyen", CreateTuyen);
 route.delete("/DeleteTuyen/:id", DeleteTuyen);
+route.get("/TuyenMaTuyen", TuyenMaTuyen);
 
 module.exports = route;
