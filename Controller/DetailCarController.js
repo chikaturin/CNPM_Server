@@ -35,7 +35,7 @@ const CreateChiTietXeOto = async (req, res) => {
       return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
     }
 
-    const MaDetailCar = `DTC${CounterChitietxe.seq}`;
+    const MaDetailCar = `DTC${counterChiTietXe.seq}`;
 
     const createChiTietXeOto = new ChiTietXeOto({
       MaDetailCar: MaDetailCar,
@@ -73,6 +73,7 @@ const UpdateChiTietXeOto = async (req, res) => {
 
 const GetChiTietXeOtoID = async (req, res) => {
   try {
+    /../;
     const { id } = req.params;
     const chiTietXeOto = await ChiTietXeOto.findById(id);
 
@@ -97,10 +98,35 @@ const DeleteChiTietXeOto = async (req, res) => {
   }
 };
 
+const FinDetailCarID = async (req, res) => {
+  const { MaSB } = req.query;
+
+  if (!MaSB) {
+    return res.status(400).json({ message: "MaSB is required" });
+  }
+
+  try {
+    const detailCars = await ChiTietXeOto.find({
+      MaSB: { $regex: MaSB, $options: "i" },
+    });
+
+    if (!detailCars.length) {
+      return res
+        .status(404)
+        .json({ message: "No cars found with the given MaSB" });
+    }
+
+    res.status(200).json({ detailCars });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding cars", error });
+  }
+};
+
 module.exports = {
   GetChiTietXeOto,
   GetChiTietXeOtoID,
   CreateChiTietXeOto,
   UpdateChiTietXeOto,
   DeleteChiTietXeOto,
+  FinDetailCarID,
 };
