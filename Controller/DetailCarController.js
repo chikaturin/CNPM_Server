@@ -6,7 +6,8 @@ const GetChiTietXeOto = async (req, res) => {
     const chiTietXeOto = await ChiTietXeOto.find({});
     res.status(200).json({ chiTietXeOto });
   } catch (e) {
-    res.status(500).json("not get chi tiet xe o to");
+    console.error("Error fetching ChiTietXeOto:", e);
+    res.status(500).json({ message: "Unable to get ChiTietXeOto" });
   }
 };
 
@@ -25,6 +26,22 @@ const CreateChiTietXeOto = async (req, res) => {
       MaSB,
     } = req.body;
 
+    // Basic validation
+    if (
+      !TenHangXe ||
+      !TenChuSoHuu ||
+      !SoHanhLyToiDa ||
+      !BienSoXe ||
+      !CongTy ||
+      !SDT_TaiXe ||
+      !SoGheToiDa ||
+      !SoTien_1km ||
+      !Image ||
+      !MaSB
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const counterChiTietXe = await CounterChitietxe.findOneAndUpdate(
       { _id: "ChiTietXeCounter" },
       { $inc: { seq: 1 } },
@@ -32,13 +49,13 @@ const CreateChiTietXeOto = async (req, res) => {
     );
 
     if (!counterChiTietXe) {
-      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+      return res.status(500).json({ message: "Error fetching counter." });
     }
 
     const MaDetailCar = `DTC${counterChiTietXe.seq}`;
 
     const createChiTietXeOto = new ChiTietXeOto({
-      MaDetailCar: MaDetailCar,
+      MaDetailCar,
       TenHangXe,
       TenChuSoHuu,
       SoHanhLyToiDa,
@@ -52,12 +69,12 @@ const CreateChiTietXeOto = async (req, res) => {
     });
 
     await createChiTietXeOto.save();
-    res.status(200).json({ createChiTietXeOto });
+    res.status(201).json({ createChiTietXeOto });
   } catch (e) {
     console.error("Error creating ChiTietXeOto:", e);
     res
       .status(500)
-      .json({ message: "Not able to create ChiTietXeOto", error: e.message });
+      .json({ message: "Unable to create ChiTietXeOto", error: e.message });
   }
 };
 
