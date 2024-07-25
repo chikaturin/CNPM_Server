@@ -42,14 +42,20 @@ const CreateChiTietXeOto = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Retrieve and increment the counter
     const counterChiTietXe = await CounterChitietxe.findOneAndUpdate(
       { _id: "ChiTietXeCounter" },
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
 
-    if (!counterChiTietXe) {
-      return res.status(500).json({ message: "Error fetching counter." });
+    // Log the counter object for debugging
+    console.log("CounterChiTietXe:", counterChiTietXe);
+
+    if (!counterChiTietXe || typeof counterChiTietXe.seq !== "number") {
+      return res
+        .status(500)
+        .json({ message: "Error fetching or incrementing counter." });
     }
 
     const MaDetailCar = `DTC${counterChiTietXe.seq}`;
