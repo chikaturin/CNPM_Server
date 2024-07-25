@@ -7,12 +7,14 @@ const {
   SchedularChange,
   CancelBooking,
   FindBookingCarID,
+  HistoryBookingCar,
 } = require("../Controller/BookingCarController.js");
 
 route.post("/GetDatXeOto", GetDatXeOto);
 route.post("/BookingCar", BookingCar);
-route.post("/FindBookingCarID/:id", FindBookingCarID);
+route.post("/FindBookingCarID", FindBookingCarID);
 route.put("/BookingCar/SchedularChange/:id", SchedularChange);
 route.delete("/BookingCar/CancelBooking/:id", CancelBooking);
+route.delete("/BookingCar/HistoryBookingCar/:id", HistoryBookingCar);
 
 module.exports = route;
