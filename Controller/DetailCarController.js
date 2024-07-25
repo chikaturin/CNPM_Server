@@ -26,28 +26,33 @@ const CreateChiTietXeOto = async (req, res) => {
       MaSB,
     } = req.body;
 
-    // Retrieve and increment the counter
+    // Basic validation
+    if (
+      !TenHangXe ||
+      !TenChuSoHuu ||
+      !SoHanhLyToiDa ||
+      !BienSoXe ||
+      !CongTy ||
+      !SDT_TaiXe ||
+      !SoGheToiDa ||
+      !SoTien_1km ||
+      !Image ||
+      !MaSB
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const counterChiTietXe = await CounterChitietxe.findOneAndUpdate(
       { _id: "ChiTietXeCounter" },
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
 
-    // Log the counter object for debugging
-    console.log("CounterChiTietXe:", counterChiTietXe);
-
-    if (!counterChiTietXe || typeof counterChiTietXe.seq !== "number") {
-      return res
-        .status(500)
-        .json({ message: "Error fetching or incrementing counter." });
+    if (!counterChiTietXe) {
+      return res.status(500).json({ message: "Error fetching counter." });
     }
 
     const MaDetailCar = `DTC${counterChiTietXe.seq}`;
-
-    // Check if MaDetailCar is valid
-    if (!MaDetailCar || MaDetailCar.includes("undefined")) {
-      return res.status(500).json({ message: "Invalid MaDetailCar value." });
-    }
 
     const createChiTietXeOto = new ChiTietXeOto({
       MaDetailCar,
