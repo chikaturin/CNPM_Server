@@ -26,22 +26,6 @@ const CreateChiTietXeOto = async (req, res) => {
       MaSB,
     } = req.body;
 
-    // Basic validation
-    if (
-      !TenHangXe ||
-      !TenChuSoHuu ||
-      !SoHanhLyToiDa ||
-      !BienSoXe ||
-      !CongTy ||
-      !SDT_TaiXe ||
-      !SoGheToiDa ||
-      !SoTien_1km ||
-      !Image ||
-      !MaSB
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
     // Retrieve and increment the counter
     const counterChiTietXe = await CounterChitietxe.findOneAndUpdate(
       { _id: "ChiTietXeCounter" },
@@ -59,6 +43,11 @@ const CreateChiTietXeOto = async (req, res) => {
     }
 
     const MaDetailCar = `DTC${counterChiTietXe.seq}`;
+
+    // Check if MaDetailCar is valid
+    if (!MaDetailCar || MaDetailCar.includes("undefined")) {
+      return res.status(500).json({ message: "Invalid MaDetailCar value." });
+    }
 
     const createChiTietXeOto = new ChiTietXeOto({
       MaDetailCar,
