@@ -26,7 +26,6 @@ const CreateChiTietXeOto = async (req, res) => {
       MaSB,
     } = req.body;
 
-    // Basic validation
     if (
       !TenHangXe ||
       !TenChuSoHuu ||
@@ -49,7 +48,7 @@ const CreateChiTietXeOto = async (req, res) => {
     );
 
     if (!counterChiTietXe) {
-      return res.status(500).json({ message: "Error fetching counter." });
+      return res.status(500).json({ message: "Failed to retrieve counter" });
     }
 
     const MaDetailCar = `DTC${counterChiTietXe.seq}`;
@@ -81,16 +80,23 @@ const CreateChiTietXeOto = async (req, res) => {
 const UpdateChiTietXeOto = async (req, res) => {
   try {
     const { id } = req.params;
-    await ChiTietXeOto.findByIdAndUpdate(id, req.body);
+    const updated = await ChiTietXeOto.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!updated) {
+      return res.status(404).json({ message: "ChiTietXeOto not found" });
+    }
+
     res.status(200).json({ message: "ChiTietXeOto updated successfully" });
   } catch (e) {
-    res.status(500).json("not update chi tiet xe o to");
+    console.error("Error updating ChiTietXeOto:", e);
+    res.status(500).json({ message: "Unable to update ChiTietXeOto" });
   }
 };
 
 const GetChiTietXeOtoID = async (req, res) => {
   try {
-    /../;
     const { id } = req.params;
     const chiTietXeOto = await ChiTietXeOto.findById(id);
 
@@ -100,7 +106,7 @@ const GetChiTietXeOtoID = async (req, res) => {
 
     res.status(200).json(chiTietXeOto);
   } catch (e) {
-    console.error(e);
+    console.error("Error fetching ChiTietXeOto by ID:", e);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -108,10 +114,16 @@ const GetChiTietXeOtoID = async (req, res) => {
 const DeleteChiTietXeOto = async (req, res) => {
   try {
     const { id } = req.params;
-    await ChiTietXeOto.findByIdAndDelete(id);
+    const deleted = await ChiTietXeOto.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "ChiTietXeOto not found" });
+    }
+
     res.status(200).json({ message: "ChiTietXeOto deleted successfully" });
   } catch (e) {
-    res.status(500).json("not delete chi tiet xe o to");
+    console.error("Error deleting ChiTietXeOto:", e);
+    res.status(500).json({ message: "Unable to delete ChiTietXeOto" });
   }
 };
 
@@ -135,6 +147,7 @@ const FinDetailCarID = async (req, res) => {
 
     res.status(200).json({ detailCars });
   } catch (error) {
+    console.error("Error finding cars by MaSB:", error);
     res.status(500).json({ message: "Error finding cars", error });
   }
 };
