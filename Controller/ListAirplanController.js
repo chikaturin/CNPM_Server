@@ -1,5 +1,5 @@
 const DanhSachSanBay = require("../Schema/schema").DanhSachSanBay;
-const { v4: uuidv4 } = require("uuid"); // For generating unique IDs
+const Counter = require("../Schema/schema").CounterLSB;
 
 const GetDanhSachSanBay = async (req, res) => {
   try {
@@ -10,7 +10,6 @@ const GetDanhSachSanBay = async (req, res) => {
     res.status(500).json({ message: "Error retrieving danh sach san bay" });
   }
 };
-
 const CreateDanhSachSanBay = async (req, res) => {
   try {
     const { TenSanBay, ThanhPho } = req.body;
@@ -19,8 +18,17 @@ const CreateDanhSachSanBay = async (req, res) => {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
-    const MaSB = uuidv4(); // Generate a unique ID using UUID
+    const counter = await Counter.findOneAndUpdate(
+      { _id: "sanBayCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
 
+    if (!counter) {
+      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+    }
+
+    const MaSB = `SB${counter.seq}`;
     const newDanhSachSanBay = new DanhSachSanBay({
       MaSB: MaSB,
       TenSanBay,
@@ -31,7 +39,9 @@ const CreateDanhSachSanBay = async (req, res) => {
     res.status(201).json({ newDanhSachSanBay });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Không thể tạo danh sách sân bay." });
+    res
+      .status(500)
+      .json({ message: "Không thể tạo danh sách sân bay.", error: e.message });
   }
 };
 

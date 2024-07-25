@@ -1,5 +1,6 @@
 const Tuyen = require("../Schema/schema.js").Tuyen;
 const DanhSachSanBay = require("../Schema/schema.js").DanhSachSanBay;
+const CounterTuyen = require("../Schema/schema").CounterTuyen;
 
 const GetTuyen = async (req, res) => {
   try {
@@ -10,7 +11,6 @@ const GetTuyen = async (req, res) => {
   }
 };
 
-let new_value_tuyen = 1;
 const CreateTuyen = async (req, res) => {
   try {
     const { DiemSanBay, DiemKetThuc, ThoiGianKhoiHanh, ThoiGianKetThuc } =
@@ -47,8 +47,18 @@ const CreateTuyen = async (req, res) => {
         message: "Điểm khởi hành đã tồn tại.",
       });
     }
-    const MaTuyen = `T${new_value_tuyen}`;
-    new_value_tuyen += 1;
+
+    const counterTuyen = await CounterTuyen.findOneAndUpdate(
+      { _id: "tuyenCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (!counterTuyen) {
+      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+    }
+
+    const MaTuyen = `T${counterTuyen.seq}`;
     const newTuyen = new Tuyen({
       MaTuyen,
       DiemSanBay,
@@ -75,26 +85,35 @@ const DeleteTuyen = async (req, res) => {
   }
 };
 const TuyenMaTuyen = async (req, res) => {
-  const { tuyen } = req.query;
+  try {
+    const { id } = req.params;
+    await Tuyen.findById(id);
+    res.status(200).json({ message: "Tuyen  successfully" });
+  } catch (e) {
+    res.status(500).json("not  tuyen");
+  }
+};
+const TuyenDiemSanBay = async (req, res) => {
+  const { diemSanBay } = req.query;
 
-  if (!tuyen) {
-    return res.status(400).json({ message: "tuyen is required" });
+  if (!diemSanBay) {
+    return res.status(400).json({ message: "diemSanBay is required" });
   }
 
   try {
     const tuyens = await Tuyen.find({
-      DiemSanBay: { $regex: tuyen, $options: "i" },
+      DiemSanBay: { $regex: diemSanBay, $options: "i" },
     });
 
     if (!tuyens.length) {
       return res
         .status(404)
-        .json({ message: "No tuyens found with the given MaTuyen" });
+        .json({ message: "No tuyens found with the given DiemSanBay" });
     }
 
     res.status(200).json({ tuyens });
   } catch (error) {
-    res.status(500).json({ message: "Error finding MaTuyen", error });
+    res.status(500).json({ message: "Error finding DiemSanBay", error });
   }
 };
 
@@ -103,5 +122,5 @@ module.exports = {
   TuyenMaTuyen,
   CreateTuyen,
   DeleteTuyen,
-  TuyenMaTuyen,
+  TuyenDiemSanBay,
 };

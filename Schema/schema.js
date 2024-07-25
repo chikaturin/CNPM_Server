@@ -37,6 +37,7 @@ const PhuongTienSchema = new mongoose.Schema({
   MaLoai: { type: Boolean, required: true },
   TenPhuongTien: { type: String, required: true, maxlength: 100 },
   SoGheToiDa: { type: Number, required: true },
+  image: { type: String, required: true },
 });
 
 const TramDungSchema = new mongoose.Schema({
@@ -140,6 +141,11 @@ const LichSuDatXeBusSchema = new mongoose.Schema({
   },
 });
 
+const counterSchema = new mongoose.Schema({
+  _id: String,
+  seq: Number,
+});
+
 // trigger
 
 DatXeOtoSchema.post("save", async function (doc) {
@@ -196,6 +202,14 @@ const AppraiseBus = mongoose.model("AppraiseBus", AppraiseBusSchema);
 const LichSuDatXeOto = mongoose.model("LichSuDatXeOto", LichSuDatXeOtoSchema);
 const LichSuDatTau = mongoose.model("LichSuDatTau", LichSuDatTauSchema);
 const LichSuDatXeBus = mongoose.model("LichSuDatXeBus", LichSuDatXeBusSchema);
+const CounterLSB = mongoose.model("CounterLSB", counterSchema);
+const CounterTuyen = mongoose.model("CounterTuyen", counterSchema);
+const CounterPhuongTien = mongoose.model("CounterPhuongTien", counterSchema);
+const CounterChitietxe = mongoose.model("CounterChitietxe", counterSchema);
+const CounterTramDung = mongoose.model("CounterTramDung", counterSchema);
+const CounterDatXe = mongoose.model("CounterDatXe", counterSchema);
+const CounterDatTau = mongoose.model("CounterDatTau", counterSchema);
+const CounterDatBuyt = mongoose.model("CounterDatBuyt", counterSchema);
 
 module.exports = {
   KhachHang,
@@ -213,4 +227,12 @@ module.exports = {
   LichSuDatXeOto,
   LichSuDatTau,
   LichSuDatXeBus,
+  CounterLSB,
+  CounterTuyen,
+  CounterPhuongTien,
+  CounterChitietxe,
+  CounterTramDung,
+  CounterDatXe,
+  CounterDatTau,
+  CounterDatBuyt,
 };

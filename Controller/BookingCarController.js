@@ -101,8 +101,8 @@ const CancelBooking = async (req, res) => {
 const FindBookingCarID = async (req, res) => {
   try {
     const { id } = req.params;
-    await DatXeOto.findById(id);
-    res.status(200).json({ message: "Finded successfully" });
+    const finddatxebyid = await DatXeOto.findById(id);
+    res.status(200).json(finddatxebyid);
   } catch (e) {
     res.status(500).json("not find dat xe o to");
   }

@@ -1,5 +1,7 @@
 const PhuongTien = require("../Schema/schema.js").PhuongTien;
 const Tuyen = require("../Schema/schema.js").Tuyen;
+const CounterPhuongTien = require("../Schema/schema").CounterPhuongTien;
+
 const GetPhuongTien = async (req, res) => {
   try {
     const phuongTien = await PhuongTien.find({});
@@ -9,7 +11,6 @@ const GetPhuongTien = async (req, res) => {
   }
 };
 
-let new_value_phuongTien = 1;
 const CreatePhuongTien = async (req, res) => {
   try {
     const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa } = req.body;
@@ -22,9 +23,17 @@ const CreatePhuongTien = async (req, res) => {
     if (SoGheToiDa <= 7) {
       return res.status(400).json({ message: "Số ghế tối đa phải lớn hơn 7." });
     }
+    const counterPhuongTien = await CounterPhuongTien.findOneAndUpdate(
+      { _id: "phuongTienCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
 
-    const MaPT = `PT${new_value_phuongTien}`;
-    new_value_phuongTien += 1;
+    if (!counterPhuongTien) {
+      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+    }
+
+    const MaPT = `PT${counterPhuongTien.seq}`;
 
     // Kiểm tra xem Mã Tuyến có tồn tại hay không
     const checkMaTuyen = await Tuyen.exists({ MaTuyen });
@@ -34,7 +43,7 @@ const CreatePhuongTien = async (req, res) => {
 
     // Tạo mới PhuongTien
     const createPhuongTien = new PhuongTien({
-      MaPT,
+      MaPT: MaPT,
       MaTuyen,
       MaLoai,
       TenPhuongTien,

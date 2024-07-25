@@ -1,4 +1,5 @@
 const ChiTietXeOto = require("../Schema/schema.js").ChiTietXeOto;
+const CounterChitietxe = require("../Schema/schema").CounterChitietxe;
 
 const GetChiTietXeOto = async (req, res) => {
   try {
@@ -9,7 +10,6 @@ const GetChiTietXeOto = async (req, res) => {
   }
 };
 
-let new_value_detailCar = 1;
 const CreateChiTietXeOto = async (req, res) => {
   try {
     const {
@@ -25,11 +25,20 @@ const CreateChiTietXeOto = async (req, res) => {
       MaSB,
     } = req.body;
 
-    const MaDetailCar = `DC${new_value_detailCar}`;
-    new_value_detailCar += 1;
+    const counterChiTietXe = await CounterChitietxe.findOneAndUpdate(
+      { _id: "ChiTietXeCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (!counterChiTietXe) {
+      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+    }
+
+    const MaDetailCar = `DTC${CounterChitietxe.seq}`;
 
     const createChiTietXeOto = new ChiTietXeOto({
-      MaDetailCar,
+      MaDetailCar: MaDetailCar,
       TenHangXe,
       TenChuSoHuu,
       SoHanhLyToiDa,

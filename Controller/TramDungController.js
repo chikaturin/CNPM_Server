@@ -1,5 +1,6 @@
 const Tuyen = require("../Schema/schema.js").Tuyen;
 const TramDung = require("../Schema/schema.js").TramDung;
+const CounterTramDung = require("../Schema/schema").CounterTramDung;
 
 const GetTramDung = async (req, res) => {
   try {
@@ -10,8 +11,6 @@ const GetTramDung = async (req, res) => {
   }
 };
 
-let new_value_tramDung = 1;
-
 const CreateTramDung = async (req, res) => {
   try {
     const { MaTuyen, DiaChi, GiaTienVe, SoKM } = req.body;
@@ -19,9 +18,6 @@ const CreateTramDung = async (req, res) => {
     if (!MaTuyen || !DiaChi || !GiaTienVe || !SoKM) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
-
-    const MaTram = `TD${new_value_tramDung}`;
-    new_value_tramDung += 1;
 
     const getMaTuyen = await Tuyen.exists({ MaTuyen });
     if (!getMaTuyen) {
@@ -40,8 +36,21 @@ const CreateTramDung = async (req, res) => {
     if (SoKM <= 0) {
       return res.status(400).json({ message: "Số KM phải lớn hơn 0." });
     }
+
+    const counterTramdung = await CounterTramDung.findOneAndUpdate(
+      { _id: "tramDungCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (!counterTramdung) {
+      return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
+    }
+
+    const Matram = `TD${counterTramdung.seq}`;
+
     const newTramDung = new TramDung({
-      MaTram,
+      MaTram: Matram,
       MaTuyen,
       DiaChi,
       SoKM,
