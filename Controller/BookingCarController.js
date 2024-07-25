@@ -99,12 +99,24 @@ const CancelBooking = async (req, res) => {
   }
 };
 const FindBookingCarID = async (req, res) => {
+  const { MaDX } = req.query;
+
+  if (!MaDX) {
+    return res.status(400).json({ message: "MaDX is required" });
+  }
+
   try {
-    const { id } = req.params;
-    const finddatxebyid = await DatXeOto.findById(id);
-    res.status(200).json(finddatxebyid);
-  } catch (e) {
-    res.status(500).json("not find dat xe o to");
+    const datXes = await TramDung.find({
+      MaDX: { $regex: MaDX, $options: "i" },
+    });
+    if (!datXes.length) {
+      return res
+        .status(404)
+        .json({ message: "No TramDung found with the given MaDX" });
+    }
+    res.status(200).json({ datXes });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding TramDung", error });
   }
 };
 
