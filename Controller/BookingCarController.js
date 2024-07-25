@@ -12,7 +12,6 @@ const GetDatXeOto = async (req, res) => {
 };
 let new_value_car = 2;
 
-// Hàm tạo đơn đặt xe
 const BookingCar = async (req, res) => {
   try {
     const {
@@ -24,10 +23,9 @@ const BookingCar = async (req, res) => {
       NgayGioDat,
       ThanhTien,
       SoKm,
-      Description, // Thêm trường Description từ client
+      Description,
     } = req.body;
 
-    // Tìm thông tin trạm dừng và chi tiết xe
     const tramDung = await TramDung.findById(MaTram);
     const chiTietXe = await ChiTietXeOto.findById(MaDetailCar);
 
@@ -40,7 +38,7 @@ const BookingCar = async (req, res) => {
     }
 
     const MaDX = `DX${new_value_car}`;
-    new_value_car += 1;
+    new_value_car += 1; // Ensure this variable is defined and managed correctly
 
     const CreateDatXeOto = new DatXeOto({
       MaDX,
@@ -58,7 +56,6 @@ const BookingCar = async (req, res) => {
 
     const result = await CreateDatXeOto.save();
 
-    // Trả về kết quả
     res.status(200).json(result);
   } catch (e) {
     console.error("Lỗi khi tạo DatXeOto:", e);
