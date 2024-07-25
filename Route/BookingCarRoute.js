@@ -15,6 +15,6 @@ route.post("/BookingCar", BookingCar);
 route.post("/FindBookingCarID", FindBookingCarID);
 route.put("/BookingCar/SchedularChange/:id", SchedularChange);
 route.delete("/BookingCar/CancelBooking/:id", CancelBooking);
-route.delete("/BookingCar/HistoryBookingCar/:id", HistoryBookingCar);
+route.post("/FindBookingCarID/:id", HistoryBookingCar);
 
 module.exports = route;

@@ -39,11 +39,9 @@ const BookingCar = async (req, res) => {
       return res.status(404).json({ message: "Trạm dừng không tồn tại" });
     }
 
-    // Sinh mã đặt xe
-    const MaDX = `DX${new_value_car}`; // Sử dụng giá trị hiện tại để tạo mã
+    const MaDX = `DX${new_value_car}`;
     new_value_car += 1;
 
-    // Tạo đối tượng DatXeOto và lưu vào cơ sở dữ liệu
     const CreateDatXeOto = new DatXeOto({
       MaDX,
       MaDetailCar,
@@ -54,8 +52,8 @@ const BookingCar = async (req, res) => {
       NgayGioDat,
       SoKm,
       ThanhTien,
-      Trangthai: true, // Đảm bảo rằng tên trường khớp với tên trường từ client
-      Description, // Lưu mô tả từ client
+      Trangthai: false,
+      Description,
     });
 
     const result = await CreateDatXeOto.save();
@@ -101,12 +99,24 @@ const CancelBooking = async (req, res) => {
 const HistoryBookingCar = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "ID is required" });
+    }
+
     const his = await DatXeOto.findById(id);
+
+    if (!his) {
+      return res.status(404).json({ message: "Booking record not found" });
+    }
+
     res.status(200).json({ his });
   } catch (e) {
-    res.status(500).json("not delete dat xe o to");
+    console.error(e);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 const FindBookingCarID = async (req, res) => {
   const { MaDX } = req.query;
 
