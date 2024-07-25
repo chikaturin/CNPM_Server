@@ -101,19 +101,29 @@ const CancelBooking = async (req, res) => {
 const HistoryBookingCar = async (req, res) => {
   try {
     const { id } = req.params;
-    const his = await DatXeOto.findByIdAndDelete(id);
+    const his = await DatXeOto.findById(id);
     res.status(200).json({ his });
   } catch (e) {
     res.status(500).json("not delete dat xe o to");
   }
 };
 const FindBookingCarID = async (req, res) => {
+  const { MaDX } = req.query;
+
+  if (!MaDX) {
+    return res.status(400).json({ message: "MaDX is required" });
+  }
+
   try {
-    const { MaDX } = req.params;
-    const his = await DatXeOto.findByIdAndDelete(MaDX);
-    res.status(200).json({ his });
-  } catch (e) {
-    res.status(500).json("not delete dat xe o to");
+    const datXes = await DatXeOto.find({
+      MaDX: { $regex: MaDX, $options: "i" },
+    });
+    if (!datXes.length) {
+      return res.status(404).json({ message: "No  found with the given MaDX" });
+    }
+    res.status(200).json({ datXes });
+  } catch (error) {
+    res.status(500).json({ message: "Error finding madx", error });
   }
 };
 
