@@ -13,10 +13,16 @@ const GetPhuongTien = async (req, res) => {
 
 const CreatePhuongTien = async (req, res) => {
   try {
-    const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa } = req.body;
+    const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa, image } = req.body;
 
     // Kiểm tra dữ liệu yêu cầu
-    if (!MaTuyen || !MaLoai === undefined || !TenPhuongTien || !SoGheToiDa) {
+    if (
+      !MaTuyen ||
+      !MaLoai === undefined ||
+      !TenPhuongTien ||
+      !SoGheToiDa ||
+      !image
+    ) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
@@ -48,6 +54,7 @@ const CreatePhuongTien = async (req, res) => {
       MaLoai,
       TenPhuongTien,
       SoGheToiDa,
+      image,
     });
 
     const result = await createPhuongTien.save();
@@ -68,8 +75,30 @@ const DeletePhuongTien = async (req, res) => {
   }
 };
 
+const SearchFindPhuongTien = async (req, res) => {
+  let type;
+  switch (req.params.type) {
+    case "true":
+      type = true;
+      break;
+    case "false":
+      type = false;
+      break;
+    default:
+      return res.status(400).send("Invalid type parameter");
+  }
+
+  try {
+    const phuongTien = await PhuongTien.find({ MaLoai: type });
+    res.json(phuongTien);
+  } catch (err) {
+    res.status(500).send("Error querying database");
+  }
+};
+
 module.exports = {
   GetPhuongTien,
   CreatePhuongTien,
   DeletePhuongTien,
+  SearchFindPhuongTien,
 };
