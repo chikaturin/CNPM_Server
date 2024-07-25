@@ -15,10 +15,9 @@ const CreatePhuongTien = async (req, res) => {
   try {
     const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa, image } = req.body;
 
-    // Kiểm tra dữ liệu yêu cầu
     if (
       !MaTuyen ||
-      !MaLoai === undefined ||
+      MaLoai === undefined ||
       !TenPhuongTien ||
       !SoGheToiDa ||
       !image
@@ -26,9 +25,10 @@ const CreatePhuongTien = async (req, res) => {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
-    if (SoGheToiDa <= 7) {
+    if (Number(SoGheToiDa) <= 7) {
       return res.status(400).json({ message: "Số ghế tối đa phải lớn hơn 7." });
     }
+
     const counterPhuongTien = await CounterPhuongTien.findOneAndUpdate(
       { _id: "phuongTienCounter" },
       { $inc: { seq: 1 } },
@@ -41,15 +41,13 @@ const CreatePhuongTien = async (req, res) => {
 
     const MaPT = `PT${counterPhuongTien.seq}`;
 
-    // Kiểm tra xem Mã Tuyến có tồn tại hay không
     const checkMaTuyen = await Tuyen.exists({ MaTuyen });
     if (!checkMaTuyen) {
       return res.status(400).json({ message: "Mã tuyến không tồn tại." });
     }
 
-    // Tạo mới PhuongTien
     const createPhuongTien = new PhuongTien({
-      MaPT: MaPT,
+      MaPT,
       MaTuyen,
       MaLoai,
       TenPhuongTien,
