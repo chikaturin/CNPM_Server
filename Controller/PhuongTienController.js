@@ -10,6 +10,16 @@ const GetPhuongTien = async (req, res) => {
     res.status(500).json("not get phuong tien");
   }
 };
+const GetPhuongTienID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Fethcing phuong tien with id: ", id);
+    const phuongTien = await PhuongTien.findById(id);
+    res.status(200).json({ phuongTien });
+  } catch (e) {
+    res.status(500).json("not get phuong tien");
+  }
+};
 
 const CreatePhuongTien = async (req, res) => {
   try {
@@ -102,4 +112,5 @@ module.exports = {
   CreatePhuongTien,
   DeletePhuongTien,
   SearchFindPhuongTien,
+  GetPhuongTienID,
 };

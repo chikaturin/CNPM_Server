@@ -14,8 +14,8 @@ let new_value_bus = 1;
 const BuyTicketBus = async (req, res) => {
   try {
     const {
-      MaCus,
       MaPT,
+      MaTram,
       SLVe,
       DiemDon,
       DiemTra,
@@ -26,6 +26,7 @@ const BuyTicketBus = async (req, res) => {
     if (
       !MaCus ||
       !MaPT ||
+      !MaTram ||
       !SLVe ||
       !DiemDon ||
       !DiemTra ||
@@ -41,17 +42,16 @@ const BuyTicketBus = async (req, res) => {
 
     const MaDX = `DX${new_value_bus}`;
     new_value_bus += 1;
-    const MaKH = await KhachHang.findbyId({ MaCus: MaCus });
-    const MaXeBus = await PhuongTien.findbyId({ MaPT: MaPT });
     const buyTicketBus = new PhieuDatXeBus({
       MaVeBus: MaDX,
-      MaCus: MaKH._id,
-      MaPT: MaXeBus.GiaTienVe,
+      MaPT,
+      MaTram,
       SLVe,
       DiemDon,
       DiemTra,
       NgayGioKhoiHanh,
-      ThanhTien: MaXeBus.GiaTienVe * SLVe,
+      ThanhTien,
+      TrangThai: false,
     });
     await buyTicketBus.save();
     res.status(200).json({ buyTicketBus });
