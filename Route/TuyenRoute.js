@@ -5,11 +5,11 @@ const {
   CreateTuyen,
   TuyenDiemSanBay,
   DeleteTuyen,
-  TuyenMaTuyen,
+  TuyenIDTuyen,
 } = require("../Controller/TuyenControler.js");
 
 route.get("/GetTuyen", GetTuyen);
-route.get("/TuyenID/:id", TuyenMaTuyen);
+route.get("/TuyenID/:id", TuyenIDTuyen);
 route.post("/CreateTuyen", CreateTuyen);
 route.delete("/DeleteTuyen/:id", DeleteTuyen);
 route.get("/TuyenDiemSanBay", TuyenDiemSanBay);

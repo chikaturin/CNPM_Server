@@ -78,15 +78,15 @@ const GetSanBayID = async (req, res) => {
 };
 
 const getSanBaybyMaSanBay = async (req, res) => {
-  const { sanbay } = req.query;
+  const { TenSanBay } = req.query;
 
-  if (!sanbay) {
+  if (!TenSanBay) {
     return res.status(400).json({ message: "sanbay is required" });
   }
 
   try {
     const sanbays = await DanhSachSanBay.find({
-      TenSanBay: { $regex: sanbay, $options: "i" },
+      TenSanBay: { $regex: TenSanBay, $options: "i" },
     });
 
     if (!sanbays.length) {
@@ -97,6 +97,7 @@ const getSanBaybyMaSanBay = async (req, res) => {
 
     res.status(200).json({ sanbays });
   } catch (error) {
+    console.error("Error finding SanBay:", error);
     res.status(500).json({ message: "Error finding SanBay", error });
   }
 };

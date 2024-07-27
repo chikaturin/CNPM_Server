@@ -72,7 +72,6 @@ const DeletePhuongTien = async (req, res) => {
     res.status(500).json("not delete phuong tien");
   }
 };
-
 const SearchFindPhuongTien = async (req, res) => {
   let type;
   switch (req.params.type) {
@@ -83,14 +82,18 @@ const SearchFindPhuongTien = async (req, res) => {
       type = false;
       break;
     default:
-      return res.status(400).send("Invalid type parameter");
+      return res.status(400).json({ message: "Invalid type parameter" });
   }
 
   try {
     const phuongTien = await PhuongTien.find({ MaLoai: type });
-    res.json(phuongTien);
+    if (phuongTien.length === 0) {
+      return res.status(404).json({ message: "No vehicles found" });
+    }
+    res.json({ buses: phuongTien });
   } catch (err) {
-    res.status(500).send("Error querying database");
+    console.error("Database query error:", err);
+    res.status(500).json({ message: "Error querying database" });
   }
 };
 

@@ -84,7 +84,7 @@ const DeleteTuyen = async (req, res) => {
     res.status(500).json("not delete tuyen");
   }
 };
-const TuyenMaTuyen = async (req, res) => {
+const TuyenIDTuyen = async (req, res) => {
   try {
     const { id } = req.params;
     await Tuyen.findById(id);
@@ -93,6 +93,8 @@ const TuyenMaTuyen = async (req, res) => {
     res.status(500).json("not  tuyen");
   }
 };
+
+//DiemSanBay == MaSB
 const TuyenDiemSanBay = async (req, res) => {
   const { diemSanBay } = req.query;
 
@@ -119,7 +121,7 @@ const TuyenDiemSanBay = async (req, res) => {
 
 module.exports = {
   GetTuyen,
-  TuyenMaTuyen,
+  TuyenIDTuyen,
   CreateTuyen,
   DeleteTuyen,
   TuyenDiemSanBay,

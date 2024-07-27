@@ -45,7 +45,9 @@ const TramDungSchema = new mongoose.Schema({
   MaTuyen: { type: String, ref: "Tuyen" },
   DiaChi: { type: String, required: true, maxlength: 100 },
   SoKM: { type: Number, required: true },
-  GiaTienVe: { type: Number, required: true, maxlength: 100 },
+  GiaTienVe: { type: Number, required: true },
+  GiaTienVeTau: { type: Number, required: true },
+  TenCty: { type: String, required: true, maxlength: 100 },
 });
 
 const ChiTietXeOtoSchema = new mongoose.Schema({
@@ -122,7 +124,9 @@ const AppraiseBusSchema = new mongoose.Schema({
 });
 
 const LichSuDatXeOtoSchema = new mongoose.Schema({
-  MaDX: { type: String, ref: "DatXeOto", maxlength: 5 },
+  MaKH: { type: String, required: true },
+  MaDX: { type: String, ref: "DatXeOto" },
+  Date: { type: Date, default: Date.now },
 });
 
 const LichSuDatTauSchema = new mongoose.Schema({

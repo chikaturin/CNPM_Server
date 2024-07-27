@@ -33,6 +33,12 @@ const CreateTramDung = async (req, res) => {
       return res.status(400).json({ message: "Giá tiền vé phải lớn hơn 0." });
     }
 
+    if (GiaTienVeTrain <= 0) {
+      return res
+        .status(400)
+        .json({ message: "Giá tiền vé tàu phải lớn hơn 0." });
+    }
+
     if (SoKM <= 0) {
       return res.status(400).json({ message: "Số KM phải lớn hơn 0." });
     }
@@ -55,6 +61,7 @@ const CreateTramDung = async (req, res) => {
       DiaChi,
       SoKM,
       GiaTienVe,
+      GiaTienVeTrain,
     });
 
     await newTramDung.save();
@@ -71,7 +78,9 @@ const CreateTramDung = async (req, res) => {
 const GetTramDungID = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Fetching TramDung with id:", id);
     const tramDung = await TramDung.findById(id);
+    console.log("Fetched TramDung:", tramDung);
 
     if (!tramDung) {
       return res.status(404).json({ message: "Trạm dừng không tồn tại" });
@@ -79,7 +88,7 @@ const GetTramDungID = async (req, res) => {
 
     res.status(200).json(tramDung);
   } catch (e) {
-    console.error(e);
+    console.error("Server error:", e); // Log the error
     res.status(500).json({ message: "Lỗi máy chủ" });
   }
 };
