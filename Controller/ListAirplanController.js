@@ -77,7 +77,7 @@ const GetSanBayID = async (req, res) => {
   }
 };
 
-const getSanBaybyMaSanBay = async (req, res) => {
+const getSanBaybyTenSanBay = async (req, res) => {
   const { TenSanBay } = req.query;
 
   if (!TenSanBay) {
@@ -107,5 +107,5 @@ module.exports = {
   CreateDanhSachSanBay,
   DeleteDanhSachSanBay,
   GetSanBayID,
-  getSanBaybyMaSanBay,
+  getSanBaybyTenSanBay,
 };

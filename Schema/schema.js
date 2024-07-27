@@ -38,6 +38,7 @@ const PhuongTienSchema = new mongoose.Schema({
   TenPhuongTien: { type: String, required: true, maxlength: 100 },
   SoGheToiDa: { type: Number, required: true },
   image: { type: String, required: true },
+  TenCty: { type: String, required: true, maxlength: 100 },
 });
 
 const TramDungSchema = new mongoose.Schema({
@@ -47,7 +48,6 @@ const TramDungSchema = new mongoose.Schema({
   SoKM: { type: Number, required: true },
   GiaTienVe: { type: Number, required: true },
   GiaTienVeTau: { type: Number, required: true },
-  TenCty: { type: String, required: true, maxlength: 100 },
 });
 
 const ChiTietXeOtoSchema = new mongoose.Schema({
