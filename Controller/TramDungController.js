@@ -13,9 +13,9 @@ const GetTramDung = async (req, res) => {
 
 const CreateTramDung = async (req, res) => {
   try {
-    const { MaTuyen, DiaChi, GiaTienVe, SoKM } = req.body;
+    const { MaTuyen, DiaChi, GiaTienVe, SoKM, GiaTienVeTrain } = req.body;
 
-    if (!MaTuyen || !DiaChi || !GiaTienVe || !SoKM) {
+    if (!MaTuyen || !DiaChi || !GiaTienVe || !SoKM || !GiaTienVeTrain) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
@@ -32,13 +32,11 @@ const CreateTramDung = async (req, res) => {
     if (GiaTienVe <= 0) {
       return res.status(400).json({ message: "Giá tiền vé phải lớn hơn 0." });
     }
-
     if (GiaTienVeTrain <= 0) {
       return res
         .status(400)
         .json({ message: "Giá tiền vé tàu phải lớn hơn 0." });
     }
-
     if (SoKM <= 0) {
       return res.status(400).json({ message: "Số KM phải lớn hơn 0." });
     }
