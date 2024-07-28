@@ -90,46 +90,70 @@ const SchedularChange = async (req, res) => {
     res.status(500).json({ error: "Không thể cập nhật Ngày giờ đặt." });
   }
 };
+
 const UpdateState = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await DatXeOto.findByIdAndUpdate(id, {
-      $set: { Trangthai: true },
+    const updatedBooking = await DatXeOto.findByIdAndUpdate(
+      id,
+      { $set: { Trangthai: true } },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    await LichSuDatXeOto.create({
+      MaDX: updatedBooking.MaDX,
+      MaKH: "KH02",
+      Date: updatedBooking.NgayGioDat.toString(),
     });
-    const result = await DatXeOto.findById(id);
-    await LichSuDatXeOto.create(result);
-    res.status(200).json({ message: "Đã cập nhật Ngày giờ đặt thành công." });
+
+    res
+      .status(200)
+      .json({ message: "Đã cập nhật trạng thái đặt xe thành công." });
   } catch (e) {
-    console.error("Lỗi khi cập nhật DatXeOto:", e);
-    res.status(500).json({ error: "Không thể cập nhật Ngày giờ đặt." });
+    console.error("Lỗi khi cập nhật trạng thái DatXeOto:", e);
+    res.status(500).json({ error: "Không thể cập nhật trạng thái đặt xe." });
   }
 };
 
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
-    await DatXeOto.findByIdAndDelete(id);
-    res.status(200).json({ message: "DatXeOto deleted successfully" });
+
+    const deletedBooking = await DatXeOto.findByIdAndDelete(id);
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "DatXeOto đã được hủy thành công." });
   } catch (e) {
-    res.status(500).json("not delete dat xe o to");
+    console.error("Lỗi khi hủy DatXeOto:", e);
+    res.status(500).json({ error: "Không thể hủy đặt xe." });
   }
 };
 const FindBookingCarID = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.body;
 
   if (!id) {
-    return res.status(400).json({ message: "id is required" });
+    return res.status(400).json({ message: "id là bắt buộc" });
   }
 
   try {
     const datXes = await DatXeOto.findById(id);
-    if (!datXes.length) {
-      return res.status(404).json({ message: "No  found with the given id" });
+    if (!datXes) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy đặt xe với id được cung cấp" });
     }
     res.status(200).json({ datXes });
   } catch (error) {
-    res.status(500).json({ message: "Error finding madx", error });
+    console.error("Lỗi khi tìm đặt xe theo id:", error);
+    res.status(500).json({ message: "Lỗi khi tìm đặt xe theo id", error });
   }
 };
 
@@ -139,4 +163,5 @@ module.exports = {
   SchedularChange,
   CancelBooking,
   FindBookingCarID,
+  UpdateState,
 };
