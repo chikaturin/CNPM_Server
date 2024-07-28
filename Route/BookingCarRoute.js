@@ -8,7 +8,6 @@ const {
   CancelBooking,
   FindBookingCarID,
   FindBookingCarMaDX,
-  UpdateState,
 } = require("../Controller/BookingCarController.js");
 
 route.post("/GetDatXeOto", GetDatXeOto);
@@ -17,6 +16,5 @@ route.get("/FindBookingCarID", FindBookingCarID);
 route.get("/FindBookingCarMaDX", FindBookingCarMaDX);
 route.put("/BookingCar/SchedularChange/:id", SchedularChange);
 route.delete("/BookingCar/CancelBooking/:id", CancelBooking);
-route.post("/UpdateState/:id", UpdateState);
 
 module.exports = route;

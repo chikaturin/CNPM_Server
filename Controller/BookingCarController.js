@@ -91,35 +91,6 @@ const SchedularChange = async (req, res) => {
   }
 };
 
-const UpdateState = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const updatedBooking = await DatXeOto.findByIdAndUpdate(
-      id,
-      { $set: { Trangthai: true } },
-      { new: true }
-    );
-
-    if (!updatedBooking) {
-      return res.status(404).json({ message: "Booking not found" });
-    }
-
-    await LichSuDatXeOto.create({
-      MaDX: updatedBooking._id,
-      MaKH: "KH02",
-      Date: updatedBooking.NgayGioDat.toString(),
-    });
-
-    res
-      .status(200)
-      .json({ message: "Đã cập nhật trạng thái đặt xe thành công." });
-  } catch (e) {
-    console.error("Lỗi khi cập nhật trạng thái DatXeOto:", e);
-    res.status(500).json({ error: "Không thể cập nhật trạng thái đặt xe." });
-  }
-};
-
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -127,7 +98,7 @@ const CancelBooking = async (req, res) => {
     const deletedBooking = await DatXeOto.findByIdAndDelete(id);
 
     if (!deletedBooking) {
-      return res.status(404).json({ message: "Booking not found" });
+      return res.status(404).json({ message: "Booking not found xe oto" });
     }
 
     res.status(200).json({ message: "DatXeOto đã được hủy thành công." });
@@ -184,6 +155,5 @@ module.exports = {
   SchedularChange,
   CancelBooking,
   FindBookingCarID,
-  UpdateState,
   FindBookingCarMaDX,
 };

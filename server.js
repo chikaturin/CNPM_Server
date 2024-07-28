@@ -22,6 +22,7 @@ app.use("/api", require("./Route/BookingCarRoute.js"));
 app.use("/api", require("./Route/HistoryCar.js"));
 app.use("/api", require("./Route/HistoryBusRoute.js"));
 app.use("/api", require("./Route/HistoryTrainRoute.js"));
+app.use("/api", require("./Route/UpdateStateRouter.js"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

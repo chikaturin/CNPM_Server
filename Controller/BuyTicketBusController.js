@@ -60,6 +60,22 @@ const BuyTicketBus = async (req, res) => {
   }
 };
 
+const FindBuyTicketBusMaDX = async (req, res) => {
+  try {
+    const { MaVeBus } = req.params;
+    const buyTicketBus = await PhieuDatXeBus.findOne({ MaVeBus });
+
+    if (!buyTicketBus) {
+      return res.status(404).json({ message: "Bus ticket not found" });
+    }
+
+    res.status(200).json({ buyTicketBus });
+  } catch (e) {
+    console.error("Error fetching bus ticket by MaVeBus:", e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const SchedularChange = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,35 +98,6 @@ const SchedularChange = async (req, res) => {
   }
 };
 
-const UpdateState = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const updatedBooking = await PhieuDatXeBus.findByIdAndUpdate(
-      id,
-      { $set: { Trangthai: true } },
-      { new: true }
-    );
-
-    if (!updatedBooking) {
-      return res.status(404).json({ message: "Booking not found" });
-    }
-
-    await lichSuDatXeBus.create({
-      MaDX: updatedBooking._id,
-      MaKH: "KH02",
-      Date: updatedBooking.NgayGioDat.toString(),
-    });
-
-    res
-      .status(200)
-      .json({ message: "Đã cập nhật trạng thái đặt xe thành công." });
-  } catch (e) {
-    console.error("Lỗi khi cập nhật trạng thái PhieuDatXeBus:", e);
-    res.status(500).json({ error: "Không thể cập nhật trạng thái đặt xe." });
-  }
-};
-
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -126,4 +113,5 @@ module.exports = {
   BuyTicketBus,
   SchedularChange,
   CancelBooking,
+  FindBuyTicketBusMaDX,
 };

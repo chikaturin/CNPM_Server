@@ -53,7 +53,7 @@ const BuyTicketTrain = async (req, res) => {
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
-    const MaVeTau = `DT${countterdattau.seq}`;
+    const MaVeTau = `DX${countterdattau.seq}`;
 
     const phieuDatTau = new PhieuDatTau({
       MaVeTau,
@@ -72,6 +72,22 @@ const BuyTicketTrain = async (req, res) => {
     res.status(200).json({ phieuDatTau });
   } catch (e) {
     res.status(500).json("Không tạo được phiếu đặt tàu");
+  }
+};
+
+const FindBuyTicketTrainMaDX = async (req, res) => {
+  try {
+    const { MaVeTau } = req.params;
+    const buyTicketTrain = await PhieuDatTau.findOne({ MaVeTau });
+
+    if (!buyTicketTrain) {
+      return res.status(404).json({ message: "Train ticket not found" });
+    }
+
+    res.status(200).json({ buyTicketTrain });
+  } catch (e) {
+    console.error("Error fetching train ticket by MaVeTau:", e);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -115,4 +131,5 @@ module.exports = {
   BuyTicketTrain,
   SchedularChange,
   CancelTicketTrain,
+  FindBuyTicketTrainMaDX,
 };

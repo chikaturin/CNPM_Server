@@ -132,7 +132,7 @@ const LichSuDatXeOtoSchema = new mongoose.Schema({
 const LichSuDatTauSchema = new mongoose.Schema({
   MaKH: { type: String, required: true },
   MaDX: { type: String, ref: "PhieuDatTau" },
-  Date: { type: Date, default: Date.now },
+  Date: { type: Date },
 });
 
 const LichSuDatXeBusSchema = new mongoose.Schema({
