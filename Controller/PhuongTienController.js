@@ -13,24 +13,33 @@ const GetPhuongTien = async (req, res) => {
 const GetPhuongTienID = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Fethcing phuong tien with id: ", id);
+    console.log("Fetching phuong tien with id: ", id);
+
     const phuongTien = await PhuongTien.findById(id);
+
+    if (!phuongTien) {
+      return res.status(404).json({ error: "Phuong tien not found" });
+    }
+
     res.status(200).json({ phuongTien });
   } catch (e) {
-    res.status(500).json("not get phuong tien");
+    console.error("Error fetching phuong tien: ", e);
+    res.status(500).json({ error: "Failed to get phuong tien" });
   }
 };
 
 const CreatePhuongTien = async (req, res) => {
   try {
-    const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa, image } = req.body;
+    const { MaTuyen, MaLoai, TenPhuongTien, SoGheToiDa, image, TenCty } =
+      req.body;
 
     if (
       !MaTuyen ||
       MaLoai === undefined ||
       !TenPhuongTien ||
       !SoGheToiDa ||
-      !image
+      !image ||
+      !TenCty
     ) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
@@ -63,6 +72,7 @@ const CreatePhuongTien = async (req, res) => {
       TenPhuongTien,
       SoGheToiDa,
       image,
+      TenCty,
     });
 
     const result = await createPhuongTien.save();

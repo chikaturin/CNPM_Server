@@ -1,4 +1,5 @@
 const PhieuDatXeBus = require("../Schema/schema.js").PhieuDatXeBus;
+const CounterDatBuyt = require("../Schema/schema.js").CounterDatBuyt;
 
 const GetBuyTicketBus = async (req, res) => {
   try {
@@ -9,22 +10,12 @@ const GetBuyTicketBus = async (req, res) => {
   }
 };
 
-let new_value_bus = 1;
-
 const BuyTicketBus = async (req, res) => {
   try {
-    const {
-      MaPT,
-      MaTram,
-      SLVe,
-      DiemDon,
-      DiemTra,
-      NgayGioKhoiHanh,
-      ThanhTien,
-      TrangThai,
-    } = req.body;
+    const { MaPT, MaTram, SLVe, DiemDon, DiemTra, NgayGioKhoiHanh, ThanhTien } =
+      req.body;
+
     if (
-      !MaCus ||
       !MaPT ||
       !MaTram ||
       !SLVe ||
@@ -40,8 +31,14 @@ const BuyTicketBus = async (req, res) => {
       return res.status(400).json({ message: "Số lượng vé phải lớn hơn 0." });
     }
 
-    const MaDX = `DX${new_value_bus}`;
-    new_value_bus += 1;
+    const CounterdatBuyt = await CounterDatBuyt.findOneAndUpdate(
+      { _id: "datbuytCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const MaDX = `DX${CounterdatBuyt.seq}`;
+
     const buyTicketBus = new PhieuDatXeBus({
       MaVeBus: MaDX,
       MaPT,
@@ -49,13 +46,15 @@ const BuyTicketBus = async (req, res) => {
       SLVe,
       DiemDon,
       DiemTra,
-      NgayGioKhoiHanh,
+      NgayGioKhoiHanh: new Date(NgayGioKhoiHanh),
       ThanhTien,
       TrangThai: false,
     });
+
     await buyTicketBus.save();
     res.status(200).json({ buyTicketBus });
   } catch (e) {
+    console.error(e);
     res.status(500).json("not create buy ticket bus");
   }
 };

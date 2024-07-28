@@ -1,7 +1,7 @@
 const DatXeOto = require("../Schema/schema").DatXeOto; // Đảm bảo rằng bạn đã import mô hình DatXeOto
 const TramDung = require("../Schema/schema").TramDung; // Đảm bảo rằng bạn đã import mô hình TramDung
 const ChiTietXeOto = require("../Schema/schema").ChiTietXeOto;
-
+const CounterDatXeOto = require("../Schema/schema").CounterDatXe;
 const GetDatXeOto = async (req, res) => {
   try {
     const datXeOto = await DatXeOto.find({});
@@ -10,7 +10,6 @@ const GetDatXeOto = async (req, res) => {
     res.status(500).json("not get dat xe o to");
   }
 };
-let new_value_car = 2;
 
 const BookingCar = async (req, res) => {
   try {
@@ -37,8 +36,13 @@ const BookingCar = async (req, res) => {
       return res.status(404).json({ message: "Trạm dừng không tồn tại" });
     }
 
-    const MaDX = `DX${new_value_car}`;
-    new_value_car += 1; // Ensure this variable is defined and managed correctly
+    const CounterDatXe = await CounterDatXeOto.findOneAndUpdate(
+      { _id: "datXeCounter" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const MaDX = `DX${CounterDatXe.seq}`;
 
     const CreateDatXeOto = new DatXeOto({
       MaDX,
