@@ -106,7 +106,7 @@ const UpdateState = async (req, res) => {
     }
 
     await LichSuDatXeOto.create({
-      MaDX: updatedBooking.MaDX,
+      MaDX: updatedBooking._id,
       MaKH: "KH02",
       Date: updatedBooking.NgayGioDat.toString(),
     });
@@ -136,24 +136,45 @@ const CancelBooking = async (req, res) => {
     res.status(500).json({ error: "Không thể hủy đặt xe." });
   }
 };
-const FindBookingCarID = async (req, res) => {
-  const { id } = req.body;
 
-  if (!id) {
-    return res.status(400).json({ message: "id là bắt buộc" });
+const FindBookingCarID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const datXeOto = await DatXeOto.findById(id);
+
+    if (!datXeOto) {
+      return res.status(404).json({ message: "DatXeOto not found" });
+    }
+
+    res.status(200).json(datXeOto);
+  } catch (e) {
+    console.error("Error fetching DatXeOto by ID:", e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const FindBookingCarMaDX = async (req, res) => {
+  const { MaDX } = req.query;
+
+  if (!MaDX) {
+    return res.status(400).json({ message: "MaDX is required" });
   }
 
   try {
-    const datXes = await DatXeOto.findById(id);
-    if (!datXes) {
+    const datXes = await DatXeOto.find({
+      MaDX: { $regex: MaDX, $options: "i" },
+    });
+
+    if (!datXes.length) {
       return res
         .status(404)
-        .json({ message: "Không tìm thấy đặt xe với id được cung cấp" });
+        .json({ message: "No booking found with the given MaDX" });
     }
+
     res.status(200).json({ datXes });
   } catch (error) {
-    console.error("Lỗi khi tìm đặt xe theo id:", error);
-    res.status(500).json({ message: "Lỗi khi tìm đặt xe theo id", error });
+    console.error("Error finding cars by MaDX:", error);
+    res.status(500).json({ message: "Error finding cars", error });
   }
 };
 
@@ -164,4 +185,5 @@ module.exports = {
   CancelBooking,
   FindBookingCarID,
   UpdateState,
+  FindBookingCarMaDX,
 };

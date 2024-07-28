@@ -1,5 +1,6 @@
 const PhieuDatXeBus = require("../Schema/schema.js").PhieuDatXeBus;
 const CounterDatBuyt = require("../Schema/schema.js").CounterDatBuyt;
+const lichSuDatXeBus = require("../Schema/schema.js").LichSuDatXeBus;
 
 const GetBuyTicketBus = async (req, res) => {
   try {
@@ -80,6 +81,36 @@ const SchedularChange = async (req, res) => {
     res.status(500).json({ error: "Không thể cập nhật Ngày giờ đặt." });
   }
 };
+
+const UpdateState = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedBooking = await PhieuDatXeBus.findByIdAndUpdate(
+      id,
+      { $set: { Trangthai: true } },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    await lichSuDatXeBus.create({
+      MaDX: updatedBooking._id,
+      MaKH: "KH02",
+      Date: updatedBooking.NgayGioDat.toString(),
+    });
+
+    res
+      .status(200)
+      .json({ message: "Đã cập nhật trạng thái đặt xe thành công." });
+  } catch (e) {
+    console.error("Lỗi khi cập nhật trạng thái PhieuDatXeBus:", e);
+    res.status(500).json({ error: "Không thể cập nhật trạng thái đặt xe." });
+  }
+};
+
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
