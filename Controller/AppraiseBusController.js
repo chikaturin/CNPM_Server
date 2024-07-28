@@ -11,15 +11,15 @@ const GetAppraiseBus = async (req, res) => {
 
 const CreateAppraiseBus = async (req, res) => {
   try {
-    const { MaXe, MaKH, Rating, Comment } = req.body;
-    if (!MaXe || !MaKH || !Rating || !Comment) {
+    const { MaBus, MaCus, SoSao, NoiDung } = req.body;
+    if (!MaBus || !MaCus || !SoSao || !NoiDung) {
       return res.status(400).json("Thiếu thông tin");
     }
     const appraiseBus = new AppraiseBus({
-      MaXe,
-      MaKH,
-      Rating,
-      Comment,
+      MaBus,
+      MaCus,
+      SoSao,
+      NoiDung,
     });
     await appraiseBus.save();
     res.status(200).json({ appraiseBus });

@@ -130,65 +130,20 @@ const LichSuDatXeOtoSchema = new mongoose.Schema({
 });
 
 const LichSuDatTauSchema = new mongoose.Schema({
-  MaVeTau: {
-    type: String,
-    ref: "PhieuDatTau",
-    maxlength: 5,
-  },
+  MaKH: { type: String, required: true },
+  MaDX: { type: String, ref: "PhieuDatTau" },
+  Date: { type: Date, default: Date.now },
 });
 
 const LichSuDatXeBusSchema = new mongoose.Schema({
-  MaVeBus: {
-    type: String,
-    ref: "PhieuDatXeBus",
-    maxlength: 5,
-  },
+  MaKH: { type: String, required: true },
+  MaDX: { type: String, ref: "PhieuDatXeBus" },
+  Date: { type: Date, default: Date.now },
 });
 
 const counterSchema = new mongoose.Schema({
   _id: String,
   seq: Number,
-});
-
-// trigger
-
-DatXeOtoSchema.post("save", async function (doc) {
-  try {
-    if (doc.TrangThai === 1) {
-      const lichSuDatXeOto = new LichSuDatXeOto({
-        MaDX: doc.MaDX,
-      });
-      await lichSuDatXeOto.save();
-    }
-  } catch (err) {
-    console.error("Error adding to LichSuDatXeOto:", err);
-  }
-});
-
-PhieuDatXeBusSchema.post("save", async function (doc) {
-  try {
-    if (doc.TrangThai === 1) {
-      const lichSuDatXeBus = new LichSuDatXeBus({
-        MaVeBus: doc.MaVeBus,
-      });
-      await lichSuDatXeBus.save();
-    }
-  } catch (err) {
-    console.error("Error adding to LichSuDatXeBus:", err);
-  }
-});
-
-PhieuDatTauSchema.post("save", async function (doc) {
-  try {
-    if (doc.TrangThai === 1) {
-      const lichSuDatTau = new LichSuDatTau({
-        MaVeTau: doc.MaVeTau,
-      });
-      await lichSuDatTau.save();
-    }
-  } catch (err) {
-    console.error("Error adding to LichSuDatTau:", err);
-  }
 });
 
 const KhachHang = mongoose.model("KhachHang", KhachHangSchema);

@@ -1,3 +1,5 @@
+const { LichSuDatXeOto } = require("../Schema/schema");
+
 const DatXeOto = require("../Schema/schema").DatXeOto; // Đảm bảo rằng bạn đã import mô hình DatXeOto
 const TramDung = require("../Schema/schema").TramDung; // Đảm bảo rằng bạn đã import mô hình TramDung
 const ChiTietXeOto = require("../Schema/schema").ChiTietXeOto;
@@ -88,6 +90,22 @@ const SchedularChange = async (req, res) => {
     res.status(500).json({ error: "Không thể cập nhật Ngày giờ đặt." });
   }
 };
+const UpdateState = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await DatXeOto.findByIdAndUpdate(id, {
+      $set: { Trangthai: true },
+    });
+    const result = await DatXeOto.findById(id);
+    await LichSuDatXeOto.create(result);
+    res.status(200).json({ message: "Đã cập nhật Ngày giờ đặt thành công." });
+  } catch (e) {
+    console.error("Lỗi khi cập nhật DatXeOto:", e);
+    res.status(500).json({ error: "Không thể cập nhật Ngày giờ đặt." });
+  }
+};
+
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -97,40 +115,17 @@ const CancelBooking = async (req, res) => {
     res.status(500).json("not delete dat xe o to");
   }
 };
-const HistoryBookingCar = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ message: "ID is required" });
-    }
-
-    const his = await DatXeOto.findById(id);
-
-    if (!his) {
-      return res.status(404).json({ message: "Booking record not found" });
-    }
-
-    res.status(200).json({ his });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
 const FindBookingCarID = async (req, res) => {
-  const { MaDX } = req.query;
+  const { id } = req.query;
 
-  if (!MaDX) {
-    return res.status(400).json({ message: "MaDX is required" });
+  if (!id) {
+    return res.status(400).json({ message: "id is required" });
   }
 
   try {
-    const datXes = await DatXeOto.find({
-      MaDX: { $regex: MaDX, $options: "i" },
-    });
+    const datXes = await DatXeOto.findById(id);
     if (!datXes.length) {
-      return res.status(404).json({ message: "No  found with the given MaDX" });
+      return res.status(404).json({ message: "No  found with the given id" });
     }
     res.status(200).json({ datXes });
   } catch (error) {
@@ -144,5 +139,4 @@ module.exports = {
   SchedularChange,
   CancelBooking,
   FindBookingCarID,
-  HistoryBookingCar,
 };

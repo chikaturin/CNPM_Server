@@ -23,22 +23,6 @@ const createHistory = async (req, res) => {
   }
 };
 
-const updateHistory = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updates = req.body;
-    const updatedHistory = await History.findByIdAndUpdate(id, updates, {
-      new: true,
-    }).populate("MaKH MaDX");
-    if (!updatedHistory) {
-      return res.status(404).json({ message: "History not found" });
-    }
-    res.status(200).json({ updatedHistory });
-  } catch (error) {
-    res.status(500).json({ message: "Error updating history", error });
-  }
-};
-
 const DeleteLichSuDatXeOto = async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,6 +36,5 @@ const DeleteLichSuDatXeOto = async (req, res) => {
 module.exports = {
   GetLichSuDatXeOto,
   createHistory,
-  updateHistory,
   DeleteLichSuDatXeOto,
 };
