@@ -13,6 +13,6 @@ route.post("/GetBuyTicketBus", GetBuyTicketBus);
 route.post("/BuyTicketBus", BuyTicketBus);
 route.get("/FindBuyTicketBusMaDX/:MaVeBus", FindBuyTicketBusMaDX);
 route.put("/BuyTicketBus/SchedularChange/:id", SchedularChange);
-route.delete("/CancelBooking/:MaDX", CancelBooking);
+route.delete("/CancelBookingBus/:MaDX", CancelBooking);
 
 module.exports = route;
