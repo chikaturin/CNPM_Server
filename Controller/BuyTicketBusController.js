@@ -101,7 +101,11 @@ const SchedularChange = async (req, res) => {
 const CancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id) {
+      return res.status(400).json("Thiếu thông tin");
+    }
     await PhieuDatXeBus.findByIdAndDelete(id);
+    await lichSuDatXeBus.deleteOne({ id });
     res.status(200).json({ message: "PhieuDatXeBus deleted successfully" });
   } catch (e) {
     res.status(500).json("not delete dat xe o to");

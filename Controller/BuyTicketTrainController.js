@@ -1,6 +1,7 @@
 const PhieuDatTau = require("../Schema/schema.js").PhieuDatTau;
 const CounterDatTau = require("../Schema/schema.js").CounterDatTau;
 const PhuongTien = require("../Schema/schema.js").PhuongTien;
+const LichSuDatTau = require("../Schema/schema.js").LichSuDatTau;
 
 const GetPhieusdattau = async (req, res) => {
   try {
@@ -120,7 +121,8 @@ const CancelTicketTrain = async (req, res) => {
       return res.status(400).json("Thiếu thông tin");
     }
     await PhieuDatTau.findByIdAndDelete({ id });
-    res.status(200).json("delete phieu dat tau success");
+    await LichSuDatTau.findByIdAndDelete({ id });
+    await res.status(200).json("delete phieu dat tau success");
   } catch (e) {
     res.status(500).json("not delete phieu dat tau");
   }
