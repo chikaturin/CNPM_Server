@@ -115,11 +115,11 @@ const SchedularChange = async (req, res) => {
 
 const CancelTicketTrain = async (req, res) => {
   try {
-    const { MaVeTau } = req.body;
-    if (!MaVeTau) {
+    const { id } = req.body;
+    if (!id) {
       return res.status(400).json("Thiếu thông tin");
     }
-    await PhieuDatTau.deleteOne({ MaVeTau });
+    await PhieuDatTau.findByIdAndDelete({ id });
     res.status(200).json("delete phieu dat tau success");
   } catch (e) {
     res.status(500).json("not delete phieu dat tau");
