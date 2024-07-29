@@ -19,7 +19,7 @@ const UpdateState = async (req, res) => {
 
     if (updatedBooking) {
       await LichSuDatXeOto.create({
-        MaKH: "KH070",
+        MaKH: "KHthanh",
         MaDX: updatedBooking.MaDX,
         Date: updatedBooking.NgayGioDat,
       });
@@ -38,7 +38,7 @@ const UpdateState = async (req, res) => {
     if (updatedBooking) {
       await LichSuDatXeBus.create({
         MaDX: updatedBooking.MaVeBus,
-        MaKH: "KH070",
+        MaKH: "KHthanh",
         Date: updatedBooking.NgayGioKhoiHanh,
       });
 
@@ -55,7 +55,7 @@ const UpdateState = async (req, res) => {
 
     if (updatedBooking) {
       await LichSuDatTau.create({
-        MaKH: "KH070",
+        MaKH: "KHthanh",
         MaDX: updatedBooking.MaVeTau,
         Date: updatedBooking.NgayGioKhoiHanh,
       });
