@@ -10,7 +10,7 @@ const {
   FindBookingCarMaDX,
 } = require("../Controller/BookingCarController.js");
 
-route.post("/GetDatXeOto", GetDatXeOto);
+route.get("/GetDatXeOto", GetDatXeOto);
 route.post("/BookingCar", BookingCar);
 route.get("/FindBookingCarID", FindBookingCarID);
 route.get("/FindBookingCarMaDX", FindBookingCarMaDX);
