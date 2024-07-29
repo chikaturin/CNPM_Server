@@ -93,12 +93,14 @@ const SchedularChange = async (req, res) => {
 
 const CancelBooking = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { MaDX } = req.params;
+    if (!MaDX) {
       return res.status(400).json("Thiếu thông tin");
     }
-    await DatXeOto.deleteOne({ id });
-    await LichSuDatXeOto.deleteOne({ id });
+
+    await DatXeOto.deleteOne({ MaDX });
+    await LichSuDatXeOto.deleteOne({ MaDX });
+
     res.status(200).json({ message: "DatXeOto đã được hủy thành công." });
   } catch (e) {
     console.error("Lỗi khi hủy DatXeOto:", e);

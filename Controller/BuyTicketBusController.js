@@ -100,12 +100,12 @@ const SchedularChange = async (req, res) => {
 
 const CancelBooking = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { MaVeBus } = req.params;
+    if (!MaVeBus) {
       return res.status(400).json("Thiếu thông tin");
     }
-    await PhieuDatXeBus.findByIdAndDelete(id);
-    await lichSuDatXeBus.deleteOne({ id });
+    await PhieuDatXeBus.findByIdAndDelete({ MaVeBus });
+    await lichSuDatXeBus.deleteOne({ MaVeBus });
     res.status(200).json({ message: "PhieuDatXeBus deleted successfully" });
   } catch (e) {
     res.status(500).json("not delete dat xe o to");
