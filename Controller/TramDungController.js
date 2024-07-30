@@ -15,20 +15,24 @@ const CreateTramDung = async (req, res) => {
   try {
     const { MaTuyen, DiaChi, GiaTienVe, SoKM, GiaTienVeTau } = req.body;
 
+    // Validate required fields
     if (!MaTuyen || !DiaChi || !GiaTienVe || !SoKM || !GiaTienVeTau) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc." });
     }
 
-    const getMaTuyen = await Tuyen.exists({ MaTuyen });
-    if (!getMaTuyen) {
+    // Check if MaTuyen exists
+    const tuyenExists = await Tuyen.exists({ MaTuyen });
+    if (!tuyenExists) {
       return res.status(400).json({ message: "Mã tuyến không tồn tại." });
     }
 
-    const checkDiaChi = await TramDung.exists({ DiaChi });
-    if (checkDiaChi) {
+    // Check if DiaChi already exists
+    const diaChiExists = await TramDung.exists({ DiaChi });
+    if (diaChiExists) {
       return res.status(400).json({ message: "Địa chỉ đã tồn tại." });
     }
 
+    // Validate numerical values
     if (GiaTienVe <= 0) {
       return res.status(400).json({ message: "Giá tiền vé phải lớn hơn 0." });
     }
@@ -41,6 +45,7 @@ const CreateTramDung = async (req, res) => {
       return res.status(400).json({ message: "Số KM phải lớn hơn 0." });
     }
 
+    // Increment counter and create new TramDung
     const counterTramdung = await CounterTramDung.findOneAndUpdate(
       { _id: "tramDungCounter" },
       { $inc: { seq: 1 } },
@@ -51,10 +56,10 @@ const CreateTramDung = async (req, res) => {
       return res.status(500).json({ message: "Lỗi khi lấy bộ đếm." });
     }
 
-    const Matram = `TD${counterTramdung.seq}`;
+    const MaTram = `TD${counterTramdung.seq}`;
 
     const newTramDung = new TramDung({
-      MaTram: Matram,
+      MaTram,
       MaTuyen,
       DiaChi,
       SoKM,
@@ -66,7 +71,7 @@ const CreateTramDung = async (req, res) => {
 
     res.status(201).json({ newTramDung });
   } catch (e) {
-    console.error("Lỗi khi tạo trạm dừng:", e);
+    console.error("Lỗi khi tạo trạm dừng:", e.message);
     res
       .status(500)
       .json({ message: "Không thể tạo trạm dừng.", error: e.message });
