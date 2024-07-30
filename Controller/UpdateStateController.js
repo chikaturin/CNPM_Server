@@ -24,7 +24,6 @@ const UpdateState = async (req, res) => {
         MaDX: updatedBooking.MaDX,
         Date: updatedBooking.NgayGioDat,
       });
-      await DatXeOto.findByIdAndDelete(id);
       return res
         .status(200)
         .json({ message: "Đã cập nhật trạng thái đặt xe ô tô thành công." });
@@ -43,7 +42,6 @@ const UpdateState = async (req, res) => {
         MaKH: "KHthanh",
         Date: updatedBooking.NgayGioKhoiHanh,
       });
-      await PhieuDatXeBus.findByIdAndDelete(id);
       return res
         .status(200)
         .json({ message: "Đã cập nhật trạng thái đặt xe bus thành công." });
@@ -62,7 +60,6 @@ const UpdateState = async (req, res) => {
         MaDX: updatedBooking.MaVeTau,
         Date: updatedBooking.NgayGioKhoiHanh,
       });
-      await PhieuDatTau.findByIdAndDelete(id);
       return res
         .status(200)
         .json({ message: "Đã cập nhật trạng thái đặt tàu thành công." });
