@@ -62,7 +62,7 @@ const BookingCar = async (req, res) => {
 
     const result = await CreateDatXeOto.save();
 
-    res.status(200).json({ datXeOto: result });
+    res.status(200).json(result); // Đảm bảo result chứa trường Sdt
   } catch (e) {
     console.error("Lỗi khi tạo DatXeOto:", e);
     res.status(500).json({ error: "Không thể tạo DatXeOto" });
