@@ -38,7 +38,7 @@ const BuyTicketBus = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    const MaDX = `DX${CounterdatBuyt.seq}`;
+    const MaDX = `DB${CounterdatBuyt.seq}`;
 
     const buyTicketBus = new PhieuDatXeBus({
       MaVeBus: MaDX,
