@@ -17,7 +17,7 @@ const BookingCar = async (req, res) => {
   try {
     const {
       MaDetailCar,
-      MaCus,
+      Sdt,
       MaTram,
       DiemSanBay,
       DiemDon_Tra,
@@ -49,7 +49,7 @@ const BookingCar = async (req, res) => {
     const CreateDatXeOto = new DatXeOto({
       MaDX,
       MaDetailCar,
-      MaCus,
+      Sdt,
       MaTram,
       DiemSanBay,
       DiemDon_Tra,
@@ -62,7 +62,7 @@ const BookingCar = async (req, res) => {
 
     const result = await CreateDatXeOto.save();
 
-    res.status(200).json(result);
+    res.status(200).json({ datXeOto: result });
   } catch (e) {
     console.error("Lỗi khi tạo DatXeOto:", e);
     res.status(500).json({ error: "Không thể tạo DatXeOto" });
