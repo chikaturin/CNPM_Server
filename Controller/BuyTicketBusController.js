@@ -107,7 +107,7 @@ const CancelBookingBus = async (req, res) => {
 
   try {
     const deletedBooking = await PhieuDatXeBus.deleteOne({ MaVeBus });
-    const deletedHistory = await LichSuDatTau.deleteOne({ MaDX: MaVeBus });
+    const deletedHistory = await lichSuDatXeBus.deleteOne({ MaDX: MaVeBus });
 
     if (!deletedBooking) {
       return res.status(404).json({ message: "Không tìm thấy PhieuDatXeBus" });
