@@ -106,7 +106,7 @@ const CancelBookingBus = async (req, res) => {
   }
 
   try {
-    const deletedBooking = await PhieuDatXeBus.findOneAndDelete({ MaVeBus });
+    const deletedBooking = await PhieuDatXeBus.deleteOne({ MaVeBus });
     const deletedHistory = await lichSuDatXeBus.findOneAndDelete({ MaVeBus });
 
     if (!deletedBooking) {

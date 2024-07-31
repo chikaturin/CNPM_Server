@@ -118,13 +118,25 @@ const CancelTicketTrain = async (req, res) => {
   try {
     const { MaVeTau } = req.body;
     if (!MaVeTau) {
-      return res.status(400).json("Thiếu thông tin");
+      return res.status(400).json({ message: "Thiếu thông tin" });
     }
-    await PhieuDatTau.findOneAndDelete({ MaVeTau });
-    await LichSuDatTau.findOneAndDelete({ MaVeTau });
-    await res.status(200).json("delete phieu dat tau success");
+
+    const deleteBookingResult = await PhieuDatTau.deleteOne({ MaVeTau });
+    if (deleteBookingResult.deletedCount === 0) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    const deleteHistoryResult = await LichSuDatTau.findOneAndDelete({
+      MaVeTau,
+    });
+    if (!deleteHistoryResult) {
+      return res.status(404).json({ message: "Booking history not found" });
+    }
+
+    return res.status(200).json({ message: "Delete phieu dat tau success" });
   } catch (e) {
-    res.status(500).json("not delete phieu dat tau");
+    console.error("Error deleting phieu dat tau:", e);
+    return res.status(500).json({ message: "Error deleting phieu dat tau" });
   }
 };
 
