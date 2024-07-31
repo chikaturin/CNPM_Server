@@ -1,7 +1,7 @@
 const PhieuDatTau = require("../Schema/schema.js").PhieuDatTau;
 const CounterDatTau = require("../Schema/schema.js").CounterDatTau;
 const PhuongTien = require("../Schema/schema.js").PhuongTien;
-const LichSuDatTau = require("../Schema/schema.js").LichSuDatTau;
+const lichSuDatTau = require("../Schema/schema.js").LichSuDatTau;
 
 const GetPhieusdattau = async (req, res) => {
   try {
@@ -116,7 +116,7 @@ const SchedularChange = async (req, res) => {
 
 const CancelTicketTrain = async (req, res) => {
   try {
-    const { MaVeTau } = req.body;
+    const { MaVeTau } = req.params;
     if (!MaVeTau) {
       return res.status(400).json({ message: "Thiếu thông tin" });
     }
@@ -126,7 +126,7 @@ const CancelTicketTrain = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    const deleteHistoryResult = await LichSuDatTau.deleteOne({ MaDX: MaVeTau });
+    const deleteHistoryResult = await lichSuDatTau.deleteOne({ MaDX: MaVeTau });
 
     if (!deleteHistoryResult) {
       return res.status(404).json({ message: "Booking history not found" });
