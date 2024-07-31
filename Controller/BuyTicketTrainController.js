@@ -126,9 +126,8 @@ const CancelTicketTrain = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    const deleteHistoryResult = await LichSuDatTau.findOneAndDelete({
-      MaVeTau,
-    });
+    const deleteHistoryResult = await LichSuDatTau.deleteOne({ MaDX: MaVeTau });
+
     if (!deleteHistoryResult) {
       return res.status(404).json({ message: "Booking history not found" });
     }
