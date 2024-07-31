@@ -31,8 +31,8 @@ const CreateHistoryTrain = async (req, res) => {
 
 const DeleteLichSuDatTau = async (req, res) => {
   try {
-    const { id } = req.params;
-    await LichSuDatTau.findByIdAndDelete(id);
+    const { MaDX } = req.params;
+    await LichSuDatTau.findOneAndDelete({ MaDX });
     res.status(200).json({ message: "Lịch sử đặt tàu đã bị xóa thành công" });
   } catch (e) {
     res.status(500).json("Không thể xóa lịch sử đặt tàu");

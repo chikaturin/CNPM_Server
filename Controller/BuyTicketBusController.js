@@ -38,10 +38,10 @@ const BuyTicketBus = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    const MaDX = `DB${CounterdatBuyt.seq}`;
+    const MaVeBus = `DB${CounterdatBuyt.seq}`;
 
     const buyTicketBus = new PhieuDatXeBus({
-      MaVeBus: MaDX,
+      MaVeBus,
       MaPT,
       MaTram,
       SLVe,
@@ -99,16 +99,34 @@ const SchedularChange = async (req, res) => {
 };
 
 const CancelBookingBus = async (req, res) => {
+  const { MaVeBus } = req.params;
+
+  if (!MaVeBus) {
+    return res.status(400).json({ message: "Thiếu thông tin" });
+  }
+
   try {
-    const { MaVeBus } = req.params;
-    if (!MaVeBus) {
-      return res.status(400).json("Thiếu thông tin");
+    const deletedBooking = await PhieuDatXeBus.findOneAndDelete({ MaVeBus });
+    const deletedHistory = await lichSuDatXeBus.findOneAndDelete({ MaVeBus });
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Không tìm thấy PhieuDatXeBus" });
     }
-    await PhieuDatXeBus.findByIdAndDelete({ MaVeBus });
-    await lichSuDatXeBus.deleteOne({ MaVeBus });
-    res.status(200).json({ message: "PhieuDatXeBus deleted successfully" });
+
+    if (deletedHistory.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy lịch sử đặt xe tương ứng" });
+    }
+
+    res.status(200).json({
+      message: "PhieuDatXeBus và lịch sử đặt xe đã được xóa thành công",
+    });
   } catch (e) {
-    res.status(500).json("not delete dat xe o to");
+    console.error(e);
+    res
+      .status(500)
+      .json({ message: "Không thể xóa PhieuDatXeBus và lịch sử đặt xe" });
   }
 };
 

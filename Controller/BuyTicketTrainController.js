@@ -120,8 +120,8 @@ const CancelTicketTrain = async (req, res) => {
     if (!MaVeTau) {
       return res.status(400).json("Thiếu thông tin");
     }
-    await PhieuDatTau.findByIdAndDelete({ MaVeTau });
-    await LichSuDatTau.findByIdAndDelete({ MaVeTau });
+    await PhieuDatTau.findOneAndDelete({ MaVeTau });
+    await LichSuDatTau.findOneAndDelete({ MaVeTau });
     await res.status(200).json("delete phieu dat tau success");
   } catch (e) {
     res.status(500).json("not delete phieu dat tau");

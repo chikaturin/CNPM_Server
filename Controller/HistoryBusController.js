@@ -24,8 +24,8 @@ const CreateLichSuBus = async (req, res) => {
 
 const DeleteLichSuXeBus = async (req, res) => {
   try {
-    const { id } = req.params;
-    await LichSuDatXeBus.findByIdAndDelete(id);
+    const { MaDX } = req.params;
+    await LichSuDatXeBus.findOneAndDelete(MaDX);
     res.status(200).json({ message: "LichSuDatXeBus deleted successfully" });
   } catch (e) {
     res.status(500).json("not delete lich su dat xe o to");
