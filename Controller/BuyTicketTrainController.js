@@ -54,7 +54,7 @@ const BuyTicketTrain = async (req, res) => {
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
-    const MaVeTau = `DX${countterdattau.seq}`;
+    const MaVeTau = `DT${countterdattau.seq}`;
 
     const phieuDatTau = new PhieuDatTau({
       MaVeTau,

@@ -98,7 +98,7 @@ const SchedularChange = async (req, res) => {
   }
 };
 
-const CancelBooking = async (req, res) => {
+const CancelBookingBus = async (req, res) => {
   try {
     const { MaVeBus } = req.params;
     if (!MaVeBus) {
@@ -116,6 +116,6 @@ module.exports = {
   GetBuyTicketBus,
   BuyTicketBus,
   SchedularChange,
-  CancelBooking,
+  CancelBookingBus,
   FindBuyTicketBusMaDX,
 };
