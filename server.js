@@ -5,7 +5,7 @@ const data = require("./Data/DB.js");
 
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 
 app.use("/api", require("./Route/KhachHangRoute.js"));
 app.use("/api", require("./Route/ListAirPlanRoute.js"));
